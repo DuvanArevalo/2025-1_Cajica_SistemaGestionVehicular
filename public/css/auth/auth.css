@@ -1,0 +1,29 @@
+.gradient-custom-blue {
+    background: #81bbe1;
+    background: -webkit-linear-gradient(to right, #1e73be, #148ccc, #81bbe1);
+    background: linear-gradient(to right, #1e73be, #148ccc, #81bbe1);
+}
+  
+.gradient-custom-blue-btn {
+    background: linear-gradient(to right, #1e73be, #148ccc);
+    border: none;
+    color: white;
+}
+  
+.gradient-custom-blue-btn:hover {
+    background: linear-gradient(to right, #148ccc, #1e73be); 
+    color: white;
+}
+  
+@media (min-width: 768px) {
+    .gradient-form {
+        height: 100vh !important;
+    }
+}
+  
+@media (min-width: 992px) {
+    .gradient-custom-blue {
+        border-top-right-radius: .3rem;
+        border-bottom-right-radius: .3rem;
+    }
+}
