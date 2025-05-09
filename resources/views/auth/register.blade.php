@@ -1,13 +1,13 @@
+@extends('layouts.app')
+
+@section('title', 'Registro')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/auth/auth.css') }}">
 @endpush
 
-@extends('layouts.app')
-
-@section('title', 'Registro | Sistema de gestión preoperacional EPC')
-
 @section('content')
-<section class="h-100 gradient-form" style="background-color: #eee;">
+<section class="h-100 gradient-form">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-14">
@@ -171,7 +171,6 @@
     </div>
 </section>
 
-<br>
 <x-govco-footer />
 
 <script>

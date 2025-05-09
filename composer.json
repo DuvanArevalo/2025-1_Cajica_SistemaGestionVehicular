@@ -17,6 +17,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "ibex/crud-generator": "^2.1",
+        "laravel-lang/lang": "^15.20",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.41",
@@ -55,6 +56,28 @@
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names='server,queue,vite'"
+        ],
+        "dev-cmd": [
+            "Composer\\Config::disableProcessTimeout",
+            "cls",
+            "@php artisan view:clear",
+            "@php artisan cache:clear",
+            "@php artisan config:clear",
+            "@php artisan route:clear",
+            "@php artisan optimize:clear",
+            "npm install",
+            "composer run dev"
+        ],
+        "dev-bash": [
+            "Composer\\Config::disableProcessTimeout",
+            "clear",
+            "@php artisan view:clear",
+            "@php artisan cache:clear",
+            "@php artisan config:clear",
+            "@php artisan route:clear",
+            "@php artisan optimize:clear",
+            "npm install",
+            "composer run dev"
         ],
         "test": [
             "@php artisan config:clear --ansi",

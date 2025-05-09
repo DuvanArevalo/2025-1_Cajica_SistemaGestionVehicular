@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', config('app.name', 'Laravel'))</title>
+    <title>@yield('title', 'Sistema de gestión preoperacional EPC | ' . config('app.name', 'Laravel'))</title>
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/epc.ico') }}" type="image/x-icon">
@@ -27,10 +27,10 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
+    <x-govco-navbar />
+    <x-bs-navbar />
+    
     <div id="app">
-        <x-govco-navbar />
-        <x-bs-navbar />
-
         <main class="py-4">
             @yield('content')
         </main>
@@ -38,6 +38,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.www.gov.co/layout/v4/script.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     @stack('scripts')
 </body>
 </html>

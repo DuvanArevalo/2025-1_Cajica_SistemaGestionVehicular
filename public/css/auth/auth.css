@@ -27,3 +27,159 @@
         border-bottom-right-radius: .3rem;
     }
 }
+
+[data-bs-theme="dark"] body {
+    background-color: #1a202c;
+}
+
+/* Ajusta el fondo y color de texto de las 'cards' */
+[data-bs-theme="dark"] .card {
+    background-color: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
+}
+
+/* Ajusta el color de las etiquetas de formulario */
+[data-bs-theme="dark"] .form-label {
+    color: #a0aec0;
+}
+
+/* Ajusta los campos de entrada */
+[data-bs-theme="dark"] .form-control {
+    background-color: #4a5568;
+    color: #ffffff;
+    border-color: #5a6578;
+}
+[data-bs-theme="dark"] .form-control:focus {
+    background-color: #4a5568;
+    color: #ffffff;
+    border-color: #8ab4f8;
+    box-shadow: 0 0 0 0.25rem rgba(138, 180, 248, 0.25);
+}
+[data-bs-theme="dark"] .form-control::placeholder {
+    color: #a0aec0; /* Color del placeholder */
+}
+
+/* Ajusta el color del texto silenciado (ej. "¿Olvidaste tu contraseña?") */
+[data-bs-theme="dark"] .text-muted {
+    color: #a0aec0 !important;
+}
+
+[data-bs-theme="dark"] .gradient-custom-blue .text-white {
+     color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .gradient-custom-blue {
+    background: linear-gradient(to right, #2c5282, #2a4365, #1a365d);
+}
+
+/* Ajusta botones específicos si es necesario */
+[data-bs-theme="dark"] .btn-outline-danger {
+    color: #f56565; /* Rojo claro */
+    border-color: #f56565;
+}
+[data-bs-theme="dark"] .btn-outline-danger:hover {
+    color: #ffffff;
+    background-color: #f56565;
+    border-color: #f56565;
+}
+
+[data-bs-theme="dark"] .gradient-custom-blue-btn {
+    color: white;
+}
+[data-bs-theme="dark"] .gradient-custom-blue-btn:hover {
+     color: white;
+}
+
+/* Títulos y headings */
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3,
+[data-bs-theme="dark"] h4,
+[data-bs-theme="dark"] h5,
+[data-bs-theme="dark"] h6,
+[data-bs-theme="dark"] .card-title,
+[data-bs-theme="dark"] .display-6 {
+  color: #edf2f7 !important;
+}
+
+/* Enlaces y link-primary */
+[data-bs-theme="dark"] a,
+[data-bs-theme="dark"] .link-primary {
+  color: #63b3ed;
+}
+[data-bs-theme="dark"] a:hover,
+[data-bs-theme="dark"] .link-primary:hover {
+  color: #90cdf4;
+}
+
+/* Texto dentro del gradiente azul */
+[data-bs-theme="dark"] .gradient-custom-blue,
+[data-bs-theme="dark"] .gradient-custom-blue * {
+  color: #fff !important;
+}
+[data-bs-theme="dark"] .gradient-custom-blue .text-muted {
+  color: rgba(255,255,255,.7) !important;
+}
+
+/* Fondo general más oscuro (opcional) */
+[data-bs-theme="dark"] body {
+  background-color: #1a202c;
+}
+
+/* Asegurar contraste en todo el formulario */
+[data-bs-theme="dark"] .gradient-form * {
+  color: #fff;
+}
+
+/* Navbar (logo, links, toggler) en oscuro */
+[data-bs-theme="dark"] .navbar-brand,
+[data-bs-theme="dark"] .navbar .nav-link {
+  color: #edf2f7 !important;
+}
+
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.custom-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 300px;
+    background-color: #f8f9fa;
+    color: #212529;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -150px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-left: 4px solid #fd7e14;
+}
+
+.custom-tooltip .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f8f9fa transparent transparent transparent;
+}
+
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-icon {
+    color: #fd7e14;
+    font-size: 1.2rem;
+}

@@ -211,6 +211,7 @@ body {
 
 .govco-iconContainer {
  display: inline-block !important;
+ align-items: center!important;
  width: auto !important;
 }
 
@@ -306,7 +307,7 @@ body {
 
  .govco-iconContainer {
   margin-top: 20px !important;
-  display: block !important;
+  align-items: center!important;
   width: 100% !important;
  }
 
@@ -336,4 +337,119 @@ body {
  .govco-texto-sedes {
   padding-right: 20px !important;
  }
+}
+
+/* --- Estilos para Tema Oscuro --- */
+[data-bs-theme="dark"] .govco-footer {
+    /* Ajusta el color de fondo si es necesario, o hereda del body */
+    /* background-color: #1a202c; */ /* Ejemplo de fondo oscuro */
+    border-top: 1px solid #4a5568; /* Borde superior más visible */
+}
+
+/* Ajusta el color de fondo y borde del contenedor principal del texto */
+[data-bs-theme="dark"] .govco-data-front {
+    background-color: #2d3748; /* Fondo más oscuro para el contenido */
+    border: 2px solid #4a5568; /* Borde más oscuro */
+    box-shadow: none; /* O ajusta la sombra para tema oscuro */
+}
+
+/* Ajusta los colores de los encabezados */
+[data-bs-theme="dark"] .govco-text-header-1,
+[data-bs-theme="dark"] .govco-text-header-2,
+[data-bs-theme="dark"] .govco-text-header-3 {
+    color: #a0aec0; /* Color claro para encabezados */
+}
+
+/* Ajusta el color del texto general dentro de .govco-texto-sedes */
+[data-bs-theme="dark"] .govco-texto-sedes,
+[data-bs-theme="dark"] .govco-texto-sedes p { /* Asegura que los párrafos también cambien */
+    color: #cbd5e0; /* Color de texto principal claro */
+}
+
+/* Asegura que el texto en negrita sea visible */
+[data-bs-theme="dark"] .govco-texto-sedes strong {
+    color: #e2e8f0; /* Color más brillante para texto en negrita */
+}
+
+/* Ajusta el color de los enlaces */
+[data-bs-theme="dark"] .govco-link-modal {
+    color: #8ab4f8; /* Color de enlace claro y azulado */
+}
+[data-bs-theme="dark"] .govco-link-modal:hover {
+    color: #aecbfa; /* Color de enlace al pasar el mouse */
+}
+
+/* Ajusta el color de los iconos */
+[data-bs-theme="dark"] .icon::before {
+    color: #8ab4f8; /* Mismo color que los enlaces o uno adecuado */
+}
+
+/* Ajusta el color de los iconos de redes sociales si es necesario */
+[data-bs-theme="dark"] [class^="govco-"]:before,
+[data-bs-theme="dark"] [class*=" govco-"]:before {
+    /* Si los iconos heredan color, puede que no necesites esto. */
+    /* Si tienen color fijo, ajústalo aquí */
+    /* color: #cbd5e0; */
+}
+
+/* Ajusta el color del separador en el logo del footer */
+[data-bs-theme="dark"] .govco-separator {
+    border-left: 1px solid #4a5568; /* Separador más oscuro */
+}
+
+/* Logos Gov.co - Podrían necesitar filtros para invertir colores si son SVG/imágenes */
+/* [data-bs-theme="dark"] .govco-logo-entidad,
+[data-bs-theme="dark"] .govco-co,
+[data-bs-theme="dark"] .govco-logo {
+    filter: invert(1) hue-rotate(180deg); /* Ejemplo para invertir colores */
+/* } */
+
+/* ----------------------------
+   Overrides para Gov.co Footer
+   ---------------------------- */
+
+/* Asegura que tu selector sea más específico */
+html[data-bs-theme="dark"] .govco-footer {
+  background-color: #1a202c !important;    /* Fondo oscuro */
+  border-top:    1px solid #4a5568 !important; /* Borde más visible */
+  color:         #e2e8f0 !important;    /* Texto claro */
+}
+
+
+
+/* El “cajón” principal con datos */
+html[data-bs-theme="dark"] .govco-data-front {
+  background-color: #2d3748 !important;
+  border:           2px solid #4a5568 !important;
+  box-shadow:       none !important;
+}
+
+/* Cabeceras y texto */
+html[data-bs-theme="dark"] .govco-text-header-1,
+html[data-bs-theme="dark"] .govco-text-header-2,
+html[data-bs-theme="dark"] .govco-text-header-3 {
+  color: #a0aec0 !important;
+}
+
+/* Texto normal y enlaces dentro del footer */
+html[data-bs-theme="dark"] .govco-texto-sedes,
+html[data-bs-theme="dark"] .govco-texto-sedes p {
+  color: #cbd5e0 !important;
+}
+html[data-bs-theme="dark"] .govco-link-modal {
+  color: #8ab4f8 !important;
+}
+html[data-bs-theme="dark"] .govco-link-modal:hover {
+  color: #aecbfa !important;
+}
+
+/* Separador */
+html[data-bs-theme="dark"] .govco-separator {
+  border-left: 1px solid #4a5568 !important;
+}
+
+/* Iconos sociales */
+html[data-bs-theme="dark"] [class^="govco-"]:before,
+html[data-bs-theme="dark"] [class*=" govco-"]:before {
+  color: #cbd5e0 !important;
 }

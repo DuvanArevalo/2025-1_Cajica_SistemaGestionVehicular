@@ -1,0 +1,65 @@
+:root
+[data-bs-theme] {
+    transition: background-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+}
+
+body, .navbar, .card, .btn, .form-control, .dropdown-menu, .alert, .list-group-item  {
+    transition: background-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+}
+
+// Estilos iniciales (tema claro por defecto)
+#moonIcon {
+    display: inline-block;
+}
+#sunIcon {
+    display: none;
+}
+
+// Estilos para tema oscuro
+[data-bs-theme="dark"] {
+    #moonIcon {
+        display: none;
+    }
+    #sunIcon {
+        display: inline-block;
+    }
+
+      // Toggle en blanco sobre fondo oscuro
+    #themeToggle {
+        color: #fff !important;
+        border-color: #fff !important;
+    }
+}
+
+// Estilos para tema claro
+[data-bs-theme="light"] {
+    // Toggle en negro sobre fondo claro
+    #themeToggle {
+      color: #000 !important;
+      border-color: #000 !important;
+    }
+}
+
+#themeToggle {
+    border: 1px solid currentColor;
+    border-radius: 9999px;
+    background: transparent;
+    padding: 0.375rem 0.75rem;
+    color: currentColor;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+  
+#themeToggle:hover {
+    background-color: var(--bs-btn-bg) !important;
+    border-color:     var(--bs-btn-border-color) !important;
+    color:            var(--bs-btn-color) !important;
+}
+  
+// Aseguramos que los iconos hereden el color
+#themeToggle i {
+    color: inherit;
+}

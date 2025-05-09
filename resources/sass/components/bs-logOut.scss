@@ -1,0 +1,22 @@
+#logOut {
+    border: 1px solid currentColor;
+    border-radius: 9999px;
+    background: transparent;
+    padding: 0.375rem 0.75rem !important;
+    color: #dc3545;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 50%;
+    margin: 0.25rem 0;
+}
+
+#logOut:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+#logOut .sidebar-label {
+    margin-right: 0.5rem;
+}
