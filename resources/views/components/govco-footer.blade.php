@@ -2,6 +2,7 @@
     <link rel="stylesheet" href="{{ asset('css/components/govco-footer.css') }}">
 @endpush
 
+<br>
 <div class="govco-footer">
     <div class="govco-data-front">
         <div class="govco-footer-text">
@@ -20,37 +21,37 @@
             Calle 3 Sur No. 1 – 07<br class="govco-mostrar">
             Cajicá, Cundinamarca, Colombia.<br>
             Código Postal: 250240<br><br>
-            <strong>Horario de atención:</strong><br>
+            <strong>Horario de atención:</strong>
             Lunes a Jueves: 7:00 am - 4:00 pm (Jornada continua)<br>
             Viernes: 7:00 am - 3:00 pm<br><br>
-            <strong>Contacto:</strong><br>
+            <strong>Contacto:</strong>
             Línea Atención Usuario: (+57) 310 565 6959 <br>
             Línea anticorrupción: (+57) 321 286 1900 <br>
             Correo institucional: empresa_epc@epccajica.gov.co <br>
             Correo atención usuario: Atencion.ususario@epccajica.gov.co <br>
             Notificaciones judiciales: empresa_epc@yahoo.es <br><br>
-            <strong>Emergencias 24H:</strong><br>
+            <strong>Emergencias 24H:</strong>
             Acueducto: 3114815558 | Aseo: 3114809319 | Alcantarillado: 3107981343
             </div>
 
             <div class="row col-xs-12 col-lg-7 govco-network">
             {{-- Redes sociales actualizadas --}}
-            <div class="govco-iconContainer">
-                <span class="icon govco-twitter-square"></span>
-                <a class="govco-link-modal" href="https://x.com/epccajicoficial" target="_blank" rel="noopener noreferrer">@epccajicoficial</a>
-            </div>
-            <div class="govco-iconContainer">
-                <span class="icon govco-instagram-square"></span>
-                <a class="govco-link-modal" href="https://www.instagram.com/epccajica/?igsh=a2UwNHppZHphNWZp" target="_blank" rel="noopener noreferrer">epccajica</a>
-            </div>
-            <div class="govco-iconContainer">
-                <span class="icon govco-facebook-square"></span>
-                <a class="govco-link-modal" href="https://web.facebook.com/epccajica?mibextid=ZbWKwL&_rdc=1&_rdr" target="_blank" rel="noopener noreferrer">epccajica</a>
-            </div>
-            <div class="govco-iconContainer">
-                <span class="icon govco-youtube-square"></span> {{-- Asumiendo que existe icono youtube en la fuente govco --}}
-                <a class="govco-link-modal" href="https://www.youtube.com/@epcajica" target="_blank" rel="noopener noreferrer">epccajica</a>
-            </div>
+                <div class="govco-iconContainer">
+                    <span class="icon govco-twitter-square"></span>
+                    <a class="govco-link-modal" href="https://x.com/epccajicoficial" target="_blank" rel="noopener noreferrer">@epccajicoficial</a>
+                </div>
+                <div class="govco-iconContainer">
+                    <span class="icon govco-instagram-square"></span>
+                    <a class="govco-link-modal" href="https://www.instagram.com/epccajica/?igsh=a2UwNHppZHphNWZp" target="_blank" rel="noopener noreferrer">epccajica</a>
+                </div>
+                <div class="govco-iconContainer">
+                    <span class="icon govco-facebook-square"></span>
+                    <a class="govco-link-modal" href="https://web.facebook.com/epccajica?mibextid=ZbWKwL&_rdc=1&_rdr" target="_blank" rel="noopener noreferrer">epccajica</a>
+                </div>
+                <div class="govco-iconContainer">
+                    <span class="icon govco-youtube-square"></span> {{-- Asumiendo que existe icono youtube en la fuente govco --}}
+                    <a class="govco-link-modal" href="https://www.youtube.com/@epcajica" target="_blank" rel="noopener noreferrer">epccajica</a>
+                </div>
             </div>
 
             {{-- Enlaces inferiores actualizados --}}

@@ -1,11 +1,16 @@
-// Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
-
 // Variables
-@import 'variables';
+@use 'variables';
 
 // Bootstrap
-@import 'bootstrap/scss/bootstrap';
+@use 'bootstrap/scss/bootstrap';
 
 // Bootstrap Icons
-@import "bootstrap-icons/font/bootstrap-icons.scss";
+@use "bootstrap-icons/font/bootstrap-icons.scss";
+
+// SCSS personalized
+@use 'components/bs-logOut';
+@use 'components/bs-sidebar';
+@use 'components/bs-themeToggle';
+
+// Fonts
+@import url('https://fonts.bunny.net/css?family=Nunito');
