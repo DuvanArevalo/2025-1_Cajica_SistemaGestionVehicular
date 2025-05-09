@@ -68,6 +68,17 @@ class User extends Authenticatable // implements MustVerifyEmail (si necesitas v
     }
 
     /**
+     * Get yhe feture that owns the user.
+     * @param string $featureName
+     * @return bool
+     */
+    public function hasFeature($featureName)
+    {
+        // Obtiene todas las funcionalidades del rol del usuario
+        return $this->role->features->contains('name', $featureName);
+    }
+
+    /**
      * Get the document type that owns the user.
      */
     public function documentType(): BelongsTo
