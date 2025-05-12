@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany; // Importar HasMany
 
 class DocumentType extends Model
 {
-    use HasFactory; // Usar HasFactory si tienes factories para este modelo
+    use HasFactory;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'document_types'; // Especificar el nombre de la tabla si no sigue la convención
+    protected $table = 'document_types';
 
     /**
      * The attributes that are mass assignable.

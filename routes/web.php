@@ -28,7 +28,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/home', function() {
+Route::get('/dashboard', function() {
     if (Auth::check()) {
         $roleName = strtolower(Auth::user()->role->name);
         return match ($roleName) {
@@ -39,7 +39,7 @@ Route::get('/home', function() {
         };
     }
     return redirect()->route('login');
-})->name('home');
+})->name('dashboard');
 
 Auth::routes();
 
@@ -60,6 +60,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('sections', SectionController::class)->except(['destroy']);
     Route::resource('questions', QuestionController::class)->except(['destroy']);
     Route::resource('alerts', AlertController::class)->except(['destroy']);
+    Route::resource('alert-statuses', AlertStatusController::class)->except(['destroy']);
     Route::resource('observations', ObservationController::class)->except(['destroy']);
 });
 
@@ -79,6 +80,7 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
     Route::resource('sections', SectionController::class)->except(['destroy']);
     Route::resource('questions', QuestionController::class)->except(['destroy']);
     Route::resource('alerts', AlertController::class)->except(['destroy']);
+    Route::resource('alert-statuses', AlertStatusController::class)->only(['index','show']);
     Route::resource('observations', ObservationController::class)->except(['destroy']);
 });
 
@@ -86,9 +88,9 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
 Route::middleware(['auth', 'role:conductor'])->prefix('conductor')->name('conductor.')->group(function () {
     Route::get('/dashboard', [ConductorController::class, 'index'])->name('dashboard');
     
-    // Modulos específicos para Conductor
+    // Modulos específicos para Conductor - Acceso limitado
+    Route::resource('vehicles', VehicleController::class)->only(['index']);
     Route::resource('preoperational-forms', PreoperationalFormController::class)->only(['index', 'show', 'create', 'store']);
-    Route::resource('answers', AnswerController::class)->only(['index', 'store', 'update']);
-    Route::resource('observations', ObservationController::class)->only(['index', 'store', 'update']);
-    Route::resource('vehicles', VehicleController::class)->only(['index', 'show']);
+    Route::resource('answers', AnswerController::class)->only(['index', 'show']);
+    Route::resource('observations', ObservationController::class)->only(['index', 'show']);
 });

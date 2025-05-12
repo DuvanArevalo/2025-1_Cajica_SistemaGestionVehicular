@@ -11,6 +11,17 @@
                 $rolePrefix = strtolower(Auth::user()->role->name);
             @endphp
 
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route($rolePrefix . '.dashboard') }}">
+                    <i class="bi bi-speedometer2"></i>
+                    Dashboard
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <hr class="sidebar-divider">
+            </li>
+
             @if(in_array($rolePrefix, ['admin', 'sst']))
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -202,6 +213,20 @@
                     <li><a class="dropdown-item disabled" aria-disabled="true" href="#">Eliminar</a></li>
                 </ul>
             </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-card-checklist"></i>
+                    Estados de Alerta
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route($rolePrefix . '.alert-statuses.create') }}">Crear</a></li>
+                    <li><a class="dropdown-item" href="{{ route($rolePrefix . '.alert-statuses.index') }}">Listar</a></li>
+                    <li><a class="dropdown-item" href="{{ route($rolePrefix . '.alert-statuses.edit', 1) }}">Editar</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item disabled" aria-disabled="true" href="#">Eliminar</a></li>
+                </ul>
+            </li>
             
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -217,22 +242,13 @@
                 </ul>
             </li>
             @endif
-            
-            @if($rolePrefix == 'conductor')
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-card-list"></i>
-                    Tipos de Documento
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route($rolePrefix . '.document-types.index') }}">Listar</a></li>
-                </ul>
-            </li>
-            @endif
         </ul>
 
         <!-- Separador y opciones de tema/logout al final -->
-        <ul class="list-unstyled mt-auto pt-3 border-top px-2"> 
+        <ul class="list-unstyled mt-auto pt-3 border-botton px-2"> 
+            <li class="nav-item">
+                <hr class="sidebar-divider">
+            </li>
             <li class="mb-2 d-flex align-items-center justify-content-center">
                 <x-partial.bs-themeToggle />
             </li>
