@@ -22,6 +22,7 @@ return new class extends Migration
                 ->restrictOnDelete();
 
             $table->foreignId('answer_id') // id_respuesta
+                ->nullable()
                 ->constrained('answers')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
