@@ -2,35 +2,31 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Question extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * Laravel infiere 'questions' por el nombre de la clase.
-     * protected $table = 'questions';
-     */
+    use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * Los atributos que son asignables masivamente.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'section_id',
         'text',
     ];
 
     /**
-     * Una pregunta pertenece a una seccion.
+     * Obtener las secciones asociadas a esta pregunta.
+     * Relación muchos a muchos usando la tabla pivote question_section.
      */
-    public function section(): BelongsTo
+    public function sections(): BelongsToMany
     {
-        return $this->belongsTo(Section::class, 'section_id');
+        return $this->belongsToMany(Section::class);
     }
 
     /**

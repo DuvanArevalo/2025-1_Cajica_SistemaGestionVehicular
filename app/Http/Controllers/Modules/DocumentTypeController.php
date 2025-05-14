@@ -12,9 +12,41 @@ class DocumentTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $documentTypes = DocumentType::all();
+        $query = DocumentType::query();
+
+        // Filtrar según el tipo seleccionado
+        $filterType = $request->filter_type ?? 'name';
+
+        // Filtro por nombre
+        if ($filterType == 'name' && $request->filled('name_search')) {
+            $buscado = strtolower(trim($request->name_search));
+            $query->whereRaw('LOWER(name) LIKE ?', ["%{$buscado}%"]);
+        }
+
+        // Filtro por abreviatura
+        if ($filterType == 'abbreviation' && $request->filled('abbreviation_search')) {
+            $buscado = strtolower(trim($request->abbreviation_search));
+            $query->whereRaw('LOWER(abbreviation) LIKE ?', ["%{$buscado}%"]);
+        }
+
+        // Filtro por rango de fechas
+        if ($filterType == 'date_range') {
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+        }
+
+        // Paginamos y mantenemos los filtros en la URL
+        $documentTypes = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->appends($request->only(['filter_type', 'name_search', 'abbreviation_search', 'date_from', 'date_to']));
+
         return view('modules.document_type.index', compact('documentTypes'));
     }
 

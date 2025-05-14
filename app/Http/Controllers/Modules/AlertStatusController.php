@@ -12,9 +12,40 @@ class AlertStatusController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $alertStatuses = AlertStatus::all();
+        $query = AlertStatus::query();
+
+        // Filtrar según el tipo seleccionado
+        $filterType = $request->filter_type ?? 'type';
+
+        // Filtro por nombre del estado de alerta
+        if ($filterType == 'type' && $request->filled('type_search')) {
+            $buscado = strtolower(trim($request->type_search));
+            $query->whereRaw('LOWER(type) LIKE ?', ["%{$buscado}%"]);
+        }
+
+        // Filtro por descripción
+        if ($filterType == 'description' && $request->filled('description_search')) {
+            $buscado = strtolower(trim($request->description_search));
+            $query->whereRaw('LOWER(description) LIKE ?', ["%{$buscado}%"]);
+        }
+
+        // Filtro por rango de fechas
+        if ($filterType == 'date_range') {
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+        }
+
+        // Paginamos y mantenemos los filtros en la URL
+        $alertStatuses = $query
+            ->paginate(10)
+            ->appends($request->only(['filter_type', 'type_search', 'description_search', 'date_from', 'date_to']));
+
         return view('modules.alert_status.index', compact('alertStatuses'));
     }
 

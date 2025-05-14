@@ -20,9 +20,45 @@ class AlertController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $alerts = Alert::with(['preoperationalForm', 'answer', 'observation', 'alertStatus'])->get();
+        $query = Alert::with(['preoperationalForm', 'answer', 'observation', 'alertStatus']);
+
+        // Filtrar según el tipo seleccionado
+        $filterType = $request->filter_type ?? 'form';
+
+        // Filtro por formulario
+        if ($filterType == 'form' && $request->filled('form_search')) {
+            $buscado = trim($request->form_search);
+            $query->whereHas('preoperationalForm', function($q) use ($buscado) {
+                $q->where('id', $buscado);
+            });
+        }
+
+        // Filtro por estado
+        if ($filterType == 'status' && $request->filled('status_search')) {
+            $buscado = strtolower(trim($request->status_search));
+            $query->whereHas('alertStatus', function($q) use ($buscado) {
+                $q->whereRaw('LOWER(type) LIKE ?', ["%{$buscado}%"]);
+            });
+        }
+
+        // Filtro por rango de fechas
+        if ($filterType == 'date_range') {
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+        }
+
+        // Paginamos y mantenemos los filtros en la URL
+        $alerts = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->appends($request->only(['filter_type', 'form_search', 'status_search', 'date_from', 'date_to']));
+
         return view('modules.alert.index', compact('alerts'));
     }
 

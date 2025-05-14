@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             
             // Otros seeders
             AlertStatusSeeder::class,
+            SectionSeeder::class,
+            VehicleTypeSeeder::class,
         ]);
     }
 }

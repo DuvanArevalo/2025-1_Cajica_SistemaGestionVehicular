@@ -13,12 +13,6 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <h6 class="text-uppercase text-body text-xs font-weight-bolder">ID:</h6>
-                                <p>{{ $documentType->id }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
                                 <h6 class="text-uppercase text-body text-xs font-weight-bolder">Fecha de Creación:</h6>
                                 <p>{{ $documentType->created_at->format('d/m/Y H:i:s') }}</p>
                             </div>

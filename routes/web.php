@@ -61,6 +61,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('questions', QuestionController::class)->except(['destroy']);
     Route::resource('alerts', AlertController::class)->except(['destroy']);
     Route::resource('alert-statuses', AlertStatusController::class)->except(['destroy']);
+    Route::resource('answers', AnswerController::class)->except(['destroy']);
     Route::resource('observations', ObservationController::class)->except(['destroy']);
 });
 
@@ -81,6 +82,7 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
     Route::resource('questions', QuestionController::class)->except(['destroy']);
     Route::resource('alerts', AlertController::class)->except(['destroy']);
     Route::resource('alert-statuses', AlertStatusController::class)->only(['index','show']);
+    Route::resource('answers', AnswerController::class)->except(['destroy']);
     Route::resource('observations', ObservationController::class)->except(['destroy']);
 });
 
