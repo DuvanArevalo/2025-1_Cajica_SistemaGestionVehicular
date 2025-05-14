@@ -1,6 +1,6 @@
 @props(['text' => 'Volver', 'class' => '', 'icon' => true, 'route' => null])
 
-<div {{ $attributes->merge(['class' => 'mb-3 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }}>
     @if($route)
         <a href="{{ route($route) }}" class="btn btn-outline-secondary d-inline-flex align-items-center">
             @if($icon)
