@@ -14,19 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('vehicles_models', function (Blueprint $table) {
-            $table->id();                   // id_modelo → id
-            $table->string('name', 150);    // nombre_modelo
-
-            $table->foreignId('brand_id')   // id_marca
-                ->constrained('brands')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
-
-            $table->timestamps();           // creado_en y actualizado_en
-
-            // nombre_modelo debe ser único por marca
-            $table->unique(['name', 'brand_id'], 'unique_model_per_brand');
-        });
+        $table->id();
+        $table->string('name');
+        $table->foreignId('brand_id')->constrained('vehicle_brands')->onDelete('cascade');
+        $table->timestamps();
+    });
     }
 
     /**

@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container py-4">
+    <a href="{{ route('catalogo.index') }}" class="btn btn-light border border-dark text-dark px-4 py-2">
+        ← Volver
+    </a>
     <h2 class="mb-4 text-center">Registrar Vehículo</h2>
 
     @if ($errors->any())
@@ -20,27 +23,32 @@
                 @csrf
 
                 <div class="row mb-3">
-                    <div class="col-md-12">
-                        <label for="image">Imagen del Vehículo</label>
-                        <input type="file" name="image" class="form-control" accept="image/*">
+                    <div class="col-md-6">
+                            <label for="vehicle-types_id" class="form-label">Tipo de Vehículo:</label>
+                            <select id="vehicle-types_id" name="vehicle-types_id" class="form-control" required>
+                        @foreach($vehicleTypes as $type)
+                            <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        @endforeach
+                            </select>
                     </div>
+                    <div class="col-md-6">
+                    <label for="brand_id" class="form-label">Marca:</label>
+                    <select id="brand_id" name="brand_id" class="form-control" required>
+                        @foreach($brands as $brand)
+                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="vehicle_type_id">Tipo de vehículo</label>
-                        <input type="number" name="vehicle_type_id" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="brand_id">Marca</label>
-                        <input type="number" name="brand_id" class="form-control" required>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="model_id">Modelo</label>
-                        <input type="number" name="model_id" class="form-control" required>
+                                <label for="vehicle-models_id" class="form-label">Modelo:</label>
+                                <select id="vehicle-models_id" name="vehicle-models_id" class="form-control" required>
+                            @foreach($vehicleModels as $model)
+                                <option value="{{ $model->id }}">{{ $model->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label for="model_year">Año del modelo</label>
@@ -51,7 +59,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="wheel_count">Número de ruedas</label>
-                        <input type="text" name="wheel_count" maxlength="2" class="form-control" required>
+                        <input type="number" name="wheel_count" maxlength="2" class="form-control" required>
                     </div>
                     <div class="col-md-6">
                         <label for="color">Color</label>
