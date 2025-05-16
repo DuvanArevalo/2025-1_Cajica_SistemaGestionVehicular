@@ -4,34 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VehicleModel extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * Es necesario especificarlo porque 'vehicles_models' no es la pluralización estándar de 'VehicleModel'.
-     * @var string
-     */
-    protected $table = 'vehicles_models';
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'brand_id',
-    ];
+    protected $table = 'vehicles_models'; // Especificamos el nombre correcto
 
-    /**
-     * Get the brand that owns the model.
-     */
-    public function brand(): BelongsTo
+    protected $fillable = ['name', 'brand_id'];
+
+    public function brand()
     {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->belongsTo(Brand::class);
     }
 
     /**

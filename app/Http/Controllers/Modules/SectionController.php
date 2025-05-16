@@ -1,5 +1,11 @@
 <?php
 
+
+namespace App\Http\Controllers;
+
+use App\Models\Section;
+use Illuminate\Http\Request;
+
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
@@ -13,6 +19,11 @@ class SectionController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function index()
+    {
+        //
+
     public function index(Request $request)
     {
         // Iniciar la consulta base
@@ -51,6 +62,7 @@ class SectionController extends Controller
             ->appends($request->only(['filter_type', 'name_search', 'vehicle_type_search', 'date_from', 'date_to']));
             
         return view('modules.section.index', compact('sections'));
+
     }
 
     /**
@@ -58,8 +70,12 @@ class SectionController extends Controller
      */
     public function create()
     {
+
+        //
+
         $vehicleTypes = VehicleType::all();
         return view('modules.section.create', compact('vehicleTypes'));
+
     }
 
     /**
@@ -67,6 +83,9 @@ class SectionController extends Controller
      */
     public function store(Request $request)
     {
+
+        //
+
         $request->validate([
             'name' => 'required|string|max:150|unique:sections,name',
             'vehicle_types' => 'required|array',
@@ -86,6 +105,7 @@ class SectionController extends Controller
 
         return redirect()->route(Auth::user()->role->name . '.sections.index')
             ->with('success', 'Sección '.$section->name.' creada exitosamente.');
+
     }
 
     /**
@@ -93,8 +113,12 @@ class SectionController extends Controller
      */
     public function show(Section $section)
     {
+
+        //
+
         $section->load('vehicleTypes', 'questions');
         return view('modules.section.show', compact('section'));
+
     }
 
     /**
@@ -102,6 +126,8 @@ class SectionController extends Controller
      */
     public function edit(Section $section)
     {
+        //
+
         $vehicleTypes = VehicleType::all();
         $selectedVehicleTypes = $section->vehicleTypes->pluck('id')->toArray();
         
@@ -113,6 +139,8 @@ class SectionController extends Controller
      */
     public function update(Request $request, Section $section)
     {
+        //
+
         $request->validate([
             'name' => 'required|string|max:150|unique:sections,name,' . $section->id,
             'vehicle_types' => 'required|array',
@@ -140,6 +168,7 @@ class SectionController extends Controller
      */
     public function destroy(Section $section)
     {
+        //
         // Verificar si hay preguntas asociadas a esta sección
         if ($section->questions()->count() > 0) {
             return redirect()->route(Auth::user()->role->name . '.sections.index')

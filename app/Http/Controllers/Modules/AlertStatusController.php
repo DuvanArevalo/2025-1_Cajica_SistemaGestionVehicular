@@ -1,5 +1,11 @@
 <?php
 
+
+namespace App\Http\Controllers;
+
+use App\Models\Alert;
+use Illuminate\Http\Request;
+
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
@@ -12,6 +18,11 @@ class AlertStatusController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function index()
+    {
+        //
+
     public function index(Request $request)
     {
         $query = AlertStatus::query();
@@ -47,6 +58,7 @@ class AlertStatusController extends Controller
             ->appends($request->only(['filter_type', 'type_search', 'description_search', 'date_from', 'date_to']));
 
         return view('modules.alert_status.index', compact('alertStatuses'));
+
     }
 
     /**
@@ -54,7 +66,11 @@ class AlertStatusController extends Controller
      */
     public function create()
     {
+
+        //
+
         return view('modules.alert_status.create');
+
     }
 
     /**
@@ -62,6 +78,9 @@ class AlertStatusController extends Controller
      */
     public function store(Request $request)
     {
+
+        //
+
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|max:255|unique:alert_statuses',
             'description' => 'required|string',
@@ -77,27 +96,45 @@ class AlertStatusController extends Controller
 
         return redirect()->route('admin.alert-statuses.index')
             ->with('success', 'Estado de alerta creado exitosamente.');
+
     }
 
     /**
      * Display the specified resource.
      */
+
+    public function show(Alert $alert)
+    {
+        //
+
     public function show(AlertStatus $alertStatus)
     {
         return view('modules.alert_status.show', compact('alertStatus'));
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
+
+    public function edit(Alert $alert)
+    {
+        //
+
     public function edit(AlertStatus $alertStatus)
     {
         return view('modules.alert_status.edit', compact('alertStatus'));
+
     }
 
     /**
      * Update the specified resource in storage.
      */
+
+    public function update(Request $request, Alert $alert)
+    {
+        //
+
     public function update(Request $request, AlertStatus $alertStatus)
     {
         $validator = Validator::make($request->all(), [
@@ -115,11 +152,17 @@ class AlertStatusController extends Controller
 
         return redirect()->route('admin.alert-statuses.index')
             ->with('success', 'Estado de alerta: '.$alertStatus->type.' actualizado exitosamente.');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
+
+    public function destroy(Alert $alert)
+    {
+        //
+
     public function destroy(AlertStatus $alertStatus)
     {
         // Verificar si hay alertas asociadas a este estado

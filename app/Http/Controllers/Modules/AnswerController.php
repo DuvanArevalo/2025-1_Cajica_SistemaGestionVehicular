@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Models\Answer;
+use Illuminate\Http\Request;
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
@@ -15,6 +19,9 @@ class AnswerController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index()
+    {
+        //
     public function index(Request $request)
     {
         $query = Answer::with(['form', 'question']);
@@ -71,6 +78,7 @@ class AnswerController extends Controller
      */
     public function create()
     {
+        //
         $forms = PreoperationalForm::orderBy('created_at', 'desc')->get();
         $questions = Question::all();
         
@@ -82,6 +90,7 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
+        //
         $validator = Validator::make($request->all(), [
             'form_id' => 'required|exists:preoperational_forms,id',
             'question_id' => 'required|exists:questions,id',
@@ -129,6 +138,7 @@ class AnswerController extends Controller
      */
     public function show(Answer $answer)
     {
+        //
         $answer->load(['form', 'question']);
         return view('modules.answer.show', compact('answer'));
     }
@@ -138,6 +148,7 @@ class AnswerController extends Controller
      */
     public function edit(Answer $answer)
     {
+        //
         $forms = PreoperationalForm::orderBy('created_at', 'desc')->get();
         $questions = Question::all();
         
@@ -149,6 +160,7 @@ class AnswerController extends Controller
      */
     public function update(Request $request, Answer $answer)
     {
+        //
         $validator = Validator::make($request->all(), [
             'form_id' => 'required|exists:preoperational_forms,id',
             'question_id' => 'required|exists:questions,id',
@@ -197,6 +209,7 @@ class AnswerController extends Controller
      */
     public function destroy(Answer $answer)
     {
+        //
         try {
             $answer->delete();
             return redirect()->route(Auth::user()->role->name . '.answers.index')

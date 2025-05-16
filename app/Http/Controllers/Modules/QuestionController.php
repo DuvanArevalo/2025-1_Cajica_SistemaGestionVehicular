@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Models\Question;
+use Illuminate\Http\Request;
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
@@ -13,6 +17,9 @@ class QuestionController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index()
+    {
+        //
     public function index(Request $request)
     {
         $query = Question::with('sections');
@@ -65,6 +72,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
+        //
         // Cargar todas las secciones con sus tipos de vehículo relacionados
         $sections = Section::with('vehicleTypes')->get();
         
@@ -76,6 +84,7 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        //
         $request->validate([
             'sections' => 'required|array',
             'sections.*' => 'exists:sections,id',
@@ -103,6 +112,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
+        //
         $question->load('sections');
         return view('modules.question.show', compact('question'));
     }
@@ -112,6 +122,7 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
+        //
         $sections = Section::all();
         $selectedSections = $question->sections->pluck('id')->toArray();
         return view('modules.question.edit', compact('question', 'sections', 'selectedSections'));
@@ -122,6 +133,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
+        //
         $request->validate([
             'sections' => 'required|array',
             'sections.*' => 'exists:sections,id',
@@ -146,6 +158,10 @@ class QuestionController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     */
+    public function destroy(Question $question)
+    {
+        //
      * 
      * Aunque implementamos la lógica, esta funcionalidad no estará
      * disponible en la interfaz para ningún rol por razones de transparencia.

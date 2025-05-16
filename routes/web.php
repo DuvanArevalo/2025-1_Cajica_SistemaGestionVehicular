@@ -19,6 +19,12 @@ use App\Http\Controllers\Modules\QuestionController as QuestionController;
 use App\Http\Controllers\Modules\RoleController as RoleController;
 use App\Http\Controllers\Modules\SectionController as SectionController;
 use App\Http\Controllers\Modules\UserController as UserController;
+
+
+use App\Http\Controllers\Modules\VehicleController;
+use App\Http\Controllers\Modules\VehicleTypeController;
+use App\Http\Controllers\Modules\VehicleBrandController;
+use App\Http\Controllers\Modules\VehicleModelController;
 use App\Http\Controllers\Modules\VehicleBrandController as VehicleBrandController;
 use App\Http\Controllers\Modules\VehicleController as VehicleController;
 use App\Http\Controllers\Modules\VehicleModelController as VehicleModelController;
@@ -28,6 +34,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
+Route::get('/home', function() {
 Route::get('/dashboard', function() {
     if (Auth::check()) {
         $roleName = strtolower(Auth::user()->role->name);
@@ -39,6 +47,8 @@ Route::get('/dashboard', function() {
         };
     }
     return redirect()->route('login');
+
+})->name('home');
 })->name('dashboard');
 
 Auth::routes();
@@ -60,6 +70,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('sections', SectionController::class)->except(['destroy']);
     Route::resource('questions', QuestionController::class)->except(['destroy']);
     Route::resource('alerts', AlertController::class)->except(['destroy']);
+
+
     Route::resource('alert-statuses', AlertStatusController::class)->except(['destroy']);
     Route::resource('answers', AnswerController::class)->except(['destroy']);
     Route::resource('observations', ObservationController::class)->except(['destroy']);
@@ -81,6 +93,7 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
     Route::resource('sections', SectionController::class)->except(['destroy']);
     Route::resource('questions', QuestionController::class)->except(['destroy']);
     Route::resource('alerts', AlertController::class)->except(['destroy']);
+
     Route::resource('alert-statuses', AlertStatusController::class)->only(['index','show']);
     Route::resource('answers', AnswerController::class)->except(['destroy']);
     Route::resource('observations', ObservationController::class)->except(['destroy']);
@@ -90,6 +103,29 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
 Route::middleware(['auth', 'role:conductor'])->prefix('conductor')->name('conductor.')->group(function () {
     Route::get('/dashboard', [ConductorController::class, 'index'])->name('dashboard');
     
+
+    // Modulos específicos para Conductor
+    Route::resource('document-types', DocumentTypeController::class)->except(['destroy']);
+    Route::resource('preoperational-forms', PreoperationalFormController::class)->only(['index', 'show', 'create', 'store']);
+    Route::resource('answers', AnswerController::class)->only(['index', 'store', 'update']);
+    Route::resource('observations', ObservationController::class)->only(['index', 'store', 'update']);
+    Route::resource('vehicles', VehicleController::class)->only(['index', 'show']);
+});
+
+Route::get('/catalogo', [VehicleController::class, 'index'])->name('catalogo.index');
+Route::get('/vehiculos/create', [VehicleController::class, 'create'])->name('vehiculos.create');
+Route::post('/vehiculos', [VehicleController::class, 'store'])->name('vehiculos.store');
+
+Route::get('/vehiculos/{id}', [VehicleController::class, 'show'])->name('vehiculos.show');
+Route::get('/vehiculos/{id}/edit', [VehicleController::class, 'edit'])->name('vehiculos.edit');
+Route::put('/vehiculos/{id}', [VehicleController::class, 'update'])->name('vehiculos.update');
+Route::delete('/vehiculos/{id}', [VehicleController::class, 'destroy'])->name('vehiculos.destroy');
+
+Route::resource('vehicle-types', VehicleTypeController::class);
+Route::resource('brands', VehicleBrandController::class);
+Route::resource('vehicle-models', VehicleModelController::class);
+
+
     // Modulos específicos para Conductor - Acceso limitado
     Route::resource('vehicles', VehicleController::class)->only(['index']);
     Route::resource('preoperational-forms', PreoperationalFormController::class)->only(['index', 'show', 'create', 'store']);

@@ -6,6 +6,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
+
             @if(session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -26,6 +27,13 @@
                 <div class="card-header">{{ __('Dashboard Conductor') }}</div>
 
                 <div class="card-body">
+
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
                     <h2>Bienvenido al Panel de Conductor</h2>
                     <p>Desde aquí podrás gestionar todas tus actividades como conductor y realizar los formularios preoperacionales.</p>
                     
