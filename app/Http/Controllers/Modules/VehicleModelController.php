@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\VehicleModel;
 use App\Models\Brand;
+use App\Models\VehicleModel;
 use Illuminate\Http\Request;
 
 class VehicleModelController extends Controller
@@ -15,6 +17,7 @@ class VehicleModelController extends Controller
      */
     public function index()
     {
+
         $vehicleModels = VehicleModel::with('brand')->get();
 
         // Definir la ruta del dashboard según el rol del usuario
@@ -31,14 +34,23 @@ class VehicleModelController extends Controller
     }
 
 
+        //
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
+
         $brands = Brand::all(); // Obtener todas las marcas para el formulario
 
         return view('vehicle-models.create', compact('brands'));
+    }
+
+
+
+        //
     }
 
 
@@ -47,6 +59,7 @@ class VehicleModelController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'brand_id' => 'required|exists:brands,id'
@@ -62,6 +75,9 @@ class VehicleModelController extends Controller
         }
 
         return redirect()->route('vehicle-models.index')->with('success', 'Modelo registrado correctamente.');
+
+        //
+
     }
 
     /**
@@ -75,6 +91,7 @@ class VehicleModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit($id)
     {
         $model = VehicleModel::findOrFail($id);
@@ -97,16 +114,35 @@ class VehicleModelController extends Controller
         $model->update($request->all());
 
         return redirect()->route('vehicle-models.index')->with('success', 'Modelo actualizado correctamente.');
+
+    public function edit(VehicleModel $vehicleModel)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, VehicleModel $vehicleModel)
+    {
+        //
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy($id)
     {
         $model = VehicleModel::findOrFail($id);
         $model->delete();
 
         return redirect()->route('vehicle-models.index')->with('success', 'Modelo eliminado correctamente.');
+
+    public function destroy(VehicleModel $vehicleModel)
+    {
+        //
+
     }
 }

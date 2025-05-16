@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Brand;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ class VehicleBrandController extends Controller
      */
     public function index()
     {
+
         $role = Auth::check() ? strtolower(Auth::user()->role->name) : null;
 
         $dashboardRoute = match($role) {
@@ -28,12 +30,20 @@ class VehicleBrandController extends Controller
     }
 
 
+
+        //
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
+
         return view('brands.create');
+
+        //
+
     }
 
     /**
@@ -41,6 +51,7 @@ class VehicleBrandController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:255'
         ]);
@@ -48,6 +59,11 @@ class VehicleBrandController extends Controller
         Brand::create($request->all());
 
         return redirect()->route('brands.index')->with('success', 'Marca registrada correctamente.');
+    }
+
+
+
+        //
     }
 
 
@@ -62,6 +78,7 @@ class VehicleBrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit($id)
     {
         $brand = Brand::findOrFail($id);
@@ -82,6 +99,19 @@ class VehicleBrandController extends Controller
         $brand->update($request->all());
 
         return redirect()->route('brands.index')->with('success', 'Marca actualizada correctamente.');
+
+    public function edit(Brand $brand)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Brand $brand)
+    {
+        //
+
     }
 
     /**
@@ -93,5 +123,10 @@ class VehicleBrandController extends Controller
         $brand->delete();
 
         return redirect()->route('brands.index')->with('success', 'Marca eliminada correctamente.');
+
+    public function destroy(Brand $brand)
+    {
+        //
+
     }
 }

@@ -47,7 +47,7 @@ class Alert extends Model
     /**
      * Get the status of the alert.
      */
-    public function status(): BelongsTo
+    public function alertStatus(): BelongsTo
     {
         return $this->belongsTo(AlertStatus::class, 'alert_status_id');
     }

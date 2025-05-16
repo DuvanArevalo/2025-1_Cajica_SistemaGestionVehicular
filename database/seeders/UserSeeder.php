@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
                 'document_type_id' => $docTypeCC->id,
                 'document_number' => '1000000001',
                 'role_id' => $adminRole->id,
-                // 'is_active' es true por defecto
+                'is_active' => true,
                 // 'name2', 'lastname2' son nullables
             ]
         );
@@ -57,6 +57,7 @@ class UserSeeder extends Seeder
                 'document_type_id' => $docTypeCC->id,
                 'document_number' => '1000000002', 
                 'role_id' => $sstRole->id,
+                'is_active' => true,
             ]
         );
 
@@ -70,6 +71,7 @@ class UserSeeder extends Seeder
                 'document_type_id' => $docTypeCC->id,
                 'document_number' => '1000000003',
                 'role_id' => $conductorRole->id,
+                'is_active' => true,
             ]
         );
     }
