@@ -62,38 +62,44 @@ class AdminController extends Controller
             'formularios' => $this->obtenerDatosHistoricos(PreoperationalForm::class)
         ];
         
-        return view('dashboard.admin', compact(
-            'cantidadUsuarios',
-            'usuariosEsteMes',
-            'cantidadVehiculos',
-            'vehiculosEsteMes',
-            'cantidadAlertas',
-            'alertasEsteMes',
-            'cantidadFormularios',
-            'formulariosEsteMes',
-            'desde',
-            'hasta',
-            'datosGrafica'
-        ));
+        // Agregar años disponibles (por ejemplo, últimos 5 años)
+        $añoActual = date('Y');
+        $añosDisponibles = range($añoActual - 4, $añoActual);
+        
+        return view('dashboard.admin', [
+            'cantidadUsuarios' => $cantidadUsuarios,
+            'usuariosEsteMes' => $usuariosEsteMes,
+            'cantidadVehiculos' => $cantidadVehiculos,
+            'vehiculosEsteMes' => $vehiculosEsteMes,
+            'cantidadAlertas' => $cantidadAlertas,
+            'alertasEsteMes' => $alertasEsteMes,
+            'cantidadFormularios' => $cantidadFormularios,
+            'formulariosEsteMes' => $formulariosEsteMes,
+            'desde' => $desde,
+            'hasta' => $hasta,
+            'datosGrafica' => $datosGrafica,
+            'añosDisponibles' => $añosDisponibles,
+            'año' => $request->input('año', date('Y')), // Año actual por defecto
+        ]);
     }
 
     /**
      * Obtiene datos históricos para la gráfica
      */
     private function obtenerDatosHistoricos($modelo)
-{
-    $datosMensuales = [];
-    $mesActual = Carbon::now()->month; // Mes actual (1-12)
-    $añoActual = Carbon::now()->year;
-
-    for ($mes = 1; $mes <= 12; $mes++) {
-        $inicioMes = Carbon::create($añoActual, $mes, 1)->startOfMonth();
-        $finMes = Carbon::create($añoActual, $mes, 1)->endOfMonth();
-
-        $conteo = $modelo::whereBetween('created_at', [$inicioMes, $finMes])->count();
-        $datosMensuales[] = $conteo;
+    {
+        $datosMensuales = [];
+        $mesActual = Carbon::now()->month; // Mes actual (1-12)
+        $añoActual = Carbon::now()->year;
+    
+        for ($mes = 1; $mes <= 12; $mes++) {
+            $inicioMes = Carbon::create($añoActual, $mes, 1)->startOfMonth();
+            $finMes = Carbon::create($añoActual, $mes, 1)->endOfMonth();
+    
+            $conteo = $modelo::whereBetween('created_at', [$inicioMes, $finMes])->count();
+            $datosMensuales[] = $conteo;
+        }
+    
+        return $datosMensuales;
     }
-
-    return $datosMensuales;
-}
 }

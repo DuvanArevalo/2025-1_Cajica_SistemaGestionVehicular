@@ -291,4 +291,5 @@
 }
 </style>
 @endpush
+<x-govco-footer />
 @endsection

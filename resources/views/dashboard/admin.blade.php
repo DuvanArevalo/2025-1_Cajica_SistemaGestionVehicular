@@ -9,48 +9,48 @@
         <h2 class="mb-4">Panel de Administración</h2>
         <div class="row">
             <!-- Tarjetas resumen -->
-             <!-- Usuarios -->
+            <!-- Usuarios -->
             <div class="col-md-3 mb-4">
-    <div class="card text-white bg-primary h-100">
-        <div class="card-body">
-            <h5 class="card-title">Usuarios</h5>
-            <p class="card-text display-4">{{ $cantidadUsuarios }}</p>  {{-- Total usuarios --}}
-            <p class="card-text">+{{ $usuariosEsteMes }} este mes</p>   {{-- Nuevos usuarios este mes --}}
-        </div>
-    </div>
-</div>
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Usuarios</h5>
+                        <p class="card-text display-4">{{ $cantidadUsuarios }}</p>
+                        <p class="card-text">+{{ $usuariosEsteMes }} este mes</p>
+                    </div>
+                </div>
+            </div>
             <!-- Vehiculos -->
             <div class="col-md-3 mb-4">
-    <div class="card text-white bg-success h-100">
-        <div class="card-body">
-            <h5 class="card-title">Vehículos</h5>
-            <p class="card-text display-4">{{ $cantidadVehiculos }}</p>
-            <p class="card-text">+{{ $vehiculosEsteMes }} este mes</p>
-        </div>
-    </div>
-</div>
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Vehículos</h5>
+                        <p class="card-text display-4">{{ $cantidadVehiculos }}</p>
+                        <p class="card-text">+{{ $vehiculosEsteMes }} este mes</p>
+                    </div>
+                </div>
+            </div>
             <!-- Alertas -->
             <div class="col-md-3 mb-4">
-    <div class="card text-white bg-warning h-100">
-        <div class="card-body">
-            <h5 class="card-title">Alertas</h5>
-            <p class="card-text display-4">{{ $cantidadAlertas }}</p>
-            <p class="card-text">+{{ $alertasEsteMes }} este mes</p>
-        </div>
-    </div>
-</div>
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Alertas</h5>
+                        <p class="card-text display-4">{{ $cantidadAlertas }}</p>
+                        <p class="card-text">+{{ $alertasEsteMes }} este mes</p>
+                    </div>
+                </div>
+            </div>
             <!-- Formularios -->
             <div class="col-md-3 mb-4">
-    <div class="card text-white bg-info h-100">
-        <div class="card-body">
-            <h5 class="card-title">Formularios</h5>
-            <p class="card-text display-4">{{ $cantidadFormularios }}</p>
-            <p class="card-text">+{{ $formulariosEsteMes }} este mes</p>
-        </div>
-    </div>
-</div>
+                <div class="card text-white bg-info h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Formularios</h5>
+                        <p class="card-text display-4">{{ $cantidadFormularios }}</p>
+                        <p class="card-text">+{{ $formulariosEsteMes }} este mes</p>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Filtro de fechas -->
+            <!-- Filtro de fechas -->
             <div class="row mb-3">
                 <div class="col-12">
                     <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 p-3 bg-white rounded shadow-sm border">
@@ -67,78 +67,76 @@
                         <div class="input-group me-2" style="max-width: 200px;">
                             <select id="mesSelector" name="mes" class="form-select" aria-label="Selecciona un mes">
                                 <option value="">Selecciona un mes...</option>
-                                <option value="01" {{ (request('mes') == '01' || (empty(request('mes')) && date('m') == '01')) ? 'selected' : '' }}>Enero</option>
-                                <option value="02" {{ (request('mes') == '02' || (empty(request('mes')) && date('m') == '02')) ? 'selected' : '' }}>Febrero</option>
-                                <option value="03" {{ (request('mes') == '03' || (empty(request('mes')) && date('m') == '03')) ? 'selected' : '' }}>Marzo</option>
-                                <option value="04" {{ (request('mes') == '04' || (empty(request('mes')) && date('m') == '04')) ? 'selected' : '' }}>Abril</option>
-                                <option value="05" {{ (request('mes') == '05' || (empty(request('mes')) && date('m') == '05')) ? 'selected' : '' }}>Mayo</option>
-                                <option value="06" {{ (request('mes') == '06' || (empty(request('mes')) && date('m') == '06')) ? 'selected' : '' }}>Junio</option>
-                                <option value="07" {{ (request('mes') == '07' || (empty(request('mes')) && date('m') == '07')) ? 'selected' : '' }}>Julio</option>
-                                <option value="08" {{ (request('mes') == '08' || (empty(request('mes')) && date('m') == '08')) ? 'selected' : '' }}>Agosto</option>
-                                <option value="09" {{ (request('mes') == '09' || (empty(request('mes')) && date('m') == '09')) ? 'selected' : '' }}>Septiembre</option>
-                                <option value="10" {{ (request('mes') == '10' || (empty(request('mes')) && date('m') == '10')) ? 'selected' : '' }}>Octubre</option>
-                                <option value="11" {{ (request('mes') == '11' || (empty(request('mes')) && date('m') == '11')) ? 'selected' : '' }}>Noviembre</option>
-                                <option value="12" {{ (request('mes') == '12' || (empty(request('mes')) && date('m') == '12')) ? 'selected' : '' }}>Diciembre</option>
+                                @for($i = 1; $i <= 12; $i++)
+                                    @php
+                                        $mes = str_pad($i, 2, '0', STR_PAD_LEFT);
+                                        $nombreMes = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][$i-1];
+                                    @endphp
+                                    <option value="{{ $mes }}" {{ (request('mes') == $mes || (empty(request('mes')) && date('m') == $mes)) ? 'selected' : '' }}>
+                                        {{ $nombreMes }}
+                                    </option>
+                                @endfor
                             </select>
                         </div>
 
-            <!-- Inputs de fecha -->
-            <label for="desde" class="form-label mb-0 me-2 fw-bold">Desde:</label>
-            <input type="date" id="desde" name="desde" class="form-control" style="max-width: 180px;" value="{{ $desde ?? '' }}">
-            <label for="hasta" class="form-label mb-0 ms-3 me-2 fw-bold">Hasta:</label>
-            <input type="date" id="hasta" name="hasta" class="form-control" style="max-width: 180px;" value="{{ $hasta ?? '' }}">
+                        <!-- Inputs de fecha -->
+                        <label for="desde" class="form-label mb-0 me-2 fw-bold">Desde:</label>
+                        <input type="date" id="desde" name="desde" class="form-control" style="max-width: 180px;" value="{{ $desde ?? '' }}">
+                        <label for="hasta" class="form-label mb-0 ms-3 me-2 fw-bold">Hasta:</label>
+                        <input type="date" id="hasta" name="hasta" class="form-control" style="max-width: 180px;" value="{{ $hasta ?? '' }}">
 
-            <!-- Botones -->
-            <button type="submit" class="btn btn-primary ms-3">Filtrar</button>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary ms-2">Limpiar filtros</a>
-        </form>
-    </div>
-</div>
-
-        <!-- Gráficos y secciones -->
-        <div class="row">
-            <div class="col-md-8 mb-4">
-                <div class="card h-100">
-                    <div class="card-header bg-light">
-                        Estadísticas por mes
-                    </div>
-                    <div class="card-body">
-                        <canvas id="vehiculosChart" height="120"></canvas>
-                    </div>
+                        <!-- Botones -->
+                        <button type="submit" class="btn btn-primary ms-3">Filtrar</button>
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary ms-2">Limpiar filtros</a>
+                    </form>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-header bg-light">
-                        Accesos Rápidos
+
+            <!-- Gráficos y secciones -->
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            Estadísticas por mes
+                        </div>
+                        <div class="card-body">
+                            <canvas id="vehiculosChart" height="500"></canvas>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-6 col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                        <a href="{{ route('admin.users.index') }}" class="btn btn-outline-primary w-100">Gestionar Usuarios</a>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            Accesos Rápidos
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
+                                            <a href="{{ route('admin.users.index') }}" class="btn btn-outline-primary w-100">Gestionar Usuarios</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6 col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                        <a href="{{ route('admin.vehicles.index') }}" class="btn btn-outline-success w-100">Gestionar Vehículos</a>
+                                <div class="col-6 col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
+                                            <a href="{{ route('admin.vehicles.index') }}" class="btn btn-outline-success w-100">Gestionar Vehículos</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6 col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                        <a href="{{ route('admin.alerts.index') }}" class="btn btn-outline-warning w-100">Ver Alertas</a>
+                                <div class="col-6 col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
+                                            <a href="{{ route('admin.alerts.index') }}" class="btn btn-outline-warning w-100">Ver Alertas</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6 col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                        <a href="{{ route('admin.preoperational-forms.index') }}" class="btn btn-outline-info w-100">Formularios Preoperacionales</a>
+                                <div class="col-6 col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
+                                            <a href="{{ route('admin.preoperational-forms.index') }}" class="btn btn-outline-info w-100">Formularios Preoperacionales</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -150,15 +148,14 @@
     </div>
 </div>
 
-<!-- Script para el gráfico (usa Chart.js) -->
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('vehiculosChart').getContext('2d');
-    const datosGrafica = JSON.parse('{!! json_encode($datosGrafica) !!}'); // Corregido para evitar error de decorador
-    const añoSeleccionado = '{!! $año !!}'; // Obtener el año seleccionado
+    const datosGrafica = JSON.parse('{!! json_encode($datosGrafica) !!}');
+    const añoSeleccionado = '{!! $año !!}';
     
-    // Nombres de los meses (Ene, Feb, ..., Dic)
+    // Nombres de los meses
     const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
     new Chart(ctx, {
@@ -214,16 +211,14 @@
         }
     });
     
-    // Actualizar automáticamente al cambiar el año
-    document.getElementById('añoSelector').addEventListener('change', function() {
-        this.form.submit();
-    });
-</script>
-@endpush
-
-<script>
-    // Script para alternar modo oscuro
+    // Script para alternar modo oscuro y actualización automática
     document.addEventListener('DOMContentLoaded', function () {
+        // Actualizar al cambiar el año
+        document.getElementById('añoSelector').addEventListener('change', function() {
+            this.form.submit();
+        });
+
+        // Modo oscuro
         const toggle = document.getElementById('darkModeToggle');
         const icon = document.getElementById('darkModeIcon');
         toggle && toggle.addEventListener('click', function () {
@@ -244,7 +239,6 @@
 </script>
 @endpush
 
-<!-- Estilos personalizados para la sidebar y contenido principal -->
 @push('styles')
 <style>
 /* Fondo claro por defecto */
@@ -313,5 +307,6 @@
 }
 </style>
 @endpush
-@endsection
 
+<x-govco-footer />
+@endsection
