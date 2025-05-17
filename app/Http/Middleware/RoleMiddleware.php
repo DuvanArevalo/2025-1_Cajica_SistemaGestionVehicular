@@ -20,13 +20,13 @@ class RoleMiddleware
         // 1. Verificar si el usuario está autenticado
         if (!Auth::check()) {
             // Si no está autenticado, redirigir al login
-            return redirect()->route('login');
+            return redirect()->route('login')->with('error', 'Tu cuenta no existe o no se ha verificado. Contacta al administrador o Seguridad y Salud en el Trabajo.');
         }
 
         // Verificar si el usuario está activo
         if (!Auth::user()->is_active) {
             Auth::logout();
-            return redirect()->route('login')->with('error', 'Tu cuenta está desactivada. Contacta al administrador.');
+            return redirect()->route('login')->with('error', 'Tu cuenta está desactivada. Contacta al administrador o Seguridad y Salud en el Trabajo.');
         }
 
         // 2. Obtener el rol del usuario autenticado
@@ -36,9 +36,16 @@ class RoleMiddleware
         // 3. Verificar si el rol del usuario está en la lista de roles permitidos
         $allowedRoles = array_map('strtolower', $roles); // Convertir roles permitidos a minúsculas
 
+
         if (!in_array($userRole, $allowedRoles)) {
-            // Si el rol no está permitido, redirigir a una página de no autorizado o al home
-            abort(403, 'Acceso no autorizado.');
+            $currentUrl = $request->fullUrl();
+            $baseMessage = 'No tienes permisos para acceder a la ruta: ' . $currentUrl;
+            
+            return match ($userRole) {
+                'admin'     => redirect()->route('admin.dashboard')->with('error', '¡Lo sentimos! ' . $baseMessage . '. Habla con el administrador o con el equipo de SST.'),
+                'sst'       => redirect()->route('sst.dashboard')->with('error', '¡Lo sentimos! ' . $baseMessage),
+                'conductor' => redirect()->route('conductor.dashboard')->with('error', '¡Lo sentimos! ' . $baseMessage),                default     => redirect()->route('login'),
+            };
         }
 
         // 4. Si el rol es permitido, continuar con la solicitud
