@@ -103,7 +103,7 @@
                             Estadísticas por mes
                         </div>
                         <div class="card-body">
-                            <canvas id="vehiculosChart" height="120"></canvas>
+                            <canvas id="vehiculosChart" height="500"></canvas>
                         </div>
                     </div>
                 </div>
@@ -220,5 +220,75 @@
         this.form.submit();
     });
 </script>
+@endpush
+
+<!-- Estilos personalizados para la sidebar y contenido principal -->
+@push('styles')
+<style>
+/* Fondo claro por defecto */
+.main-content-bg {
+    background: #f8f9fa;
+}
+
+/* Modo oscuro para toda la página */
+[data-bs-theme="dark"] .main-content-bg {
+    background: #181a1b !important;
+}
+
+/* Fondo negro para tarjetas y formularios en modo oscuro */
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .bg-white,
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .card-header.bg-light {
+    background-color: #23272b !important;
+    color: #fff !important;
+    border-color: #23272b !important;
+}
+
+/* Mantener colores originales de las tarjetas en modo oscuro */
+[data-bs-theme="dark"] .bg-primary,
+[data-bs-theme="dark"] .bg-success,
+[data-bs-theme="dark"] .bg-warning,
+[data-bs-theme="dark"] .bg-info {
+    background-color: var(--bs-primary) !important;
+}
+
+/* Color de texto para inputs y labels en modo oscuro */
+[data-bs-theme="dark"] .form-label,
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] label,
+[data-bs-theme="dark"] input,
+[data-bs-theme="dark"] select,
+[data-bs-theme="dark"] option {
+    color: #fff !important;
+    background-color: #23272b !important;
+    border-color: #444 !important;
+}
+
+/* Botones outline conservan su color en modo oscuro */
+[data-bs-theme="dark"] .btn-outline-primary {
+    color: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+[data-bs-theme="dark"] .btn-outline-success {
+    color: #198754 !important;
+    border-color: #198754 !important;
+}
+[data-bs-theme="dark"] .btn-outline-warning {
+    color: #ffc107 !important;
+    border-color: #ffc107 !important;
+}
+[data-bs-theme="dark"] .btn-outline-info {
+    color: #0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+}
+[data-bs-theme="dark"] .btn-outline-primary:hover,
+[data-bs-theme="dark"] .btn-outline-success:hover,
+[data-bs-theme="dark"] .btn-outline-warning:hover,
+[data-bs-theme="dark"] .btn-outline-info:hover {
+    background-color: #fff !important;
+    color: #23272b !important;
+}
+</style>
 @endpush
 @endsection
