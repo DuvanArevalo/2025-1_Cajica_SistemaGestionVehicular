@@ -9,64 +9,89 @@
         <h2 class="mb-4">Panel de Administración</h2>
         <div class="row">
             <!-- Tarjetas resumen -->
+             <!-- Usuarios -->
             <div class="col-md-3 mb-4">
-                <div class="card text-white bg-primary h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Usuarios</h5>
-                        <p class="card-text display-4">120</p>
-                        <small>+5 este mes</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card text-white bg-success h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Vehículos</h5>
-                        <p class="card-text display-4">45</p>
-                        <small>+2 este mes</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card text-white bg-warning h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Alertas</h5>
-                        <p class="card-text display-4">8</p>
-                        <small>+1 este mes</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card text-white bg-info h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Formularios</h5>
-                        <p class="card-text display-4">32</p>
-                        <small>+3 este mes</small>
-                    </div>
-                </div>
-            </div>
+    <div class="card text-white bg-primary h-100">
+        <div class="card-body">
+            <h5 class="card-title">Usuarios</h5>
+            <p class="card-text display-4">{{ $cantidadUsuarios }}</p>  {{-- Total usuarios --}}
+            <p class="card-text">+{{ $usuariosEsteMes }} este mes</p>   {{-- Nuevos usuarios este mes --}}
         </div>
+    </div>
+</div>
+            <!-- Vehiculos -->
+            <div class="col-md-3 mb-4">
+    <div class="card text-white bg-success h-100">
+        <div class="card-body">
+            <h5 class="card-title">Vehículos</h5>
+            <p class="card-text display-4">{{ $cantidadVehiculos }}</p>
+            <p class="card-text">+{{ $vehiculosEsteMes }} este mes</p>
+        </div>
+    </div>
+</div>
+            <!-- Alertas -->
+            <div class="col-md-3 mb-4">
+    <div class="card text-white bg-warning h-100">
+        <div class="card-body">
+            <h5 class="card-title">Alertas</h5>
+            <p class="card-text display-4">{{ $cantidadAlertas }}</p>
+            <p class="card-text">+{{ $alertasEsteMes }} este mes</p>
+        </div>
+    </div>
+</div>
+            <!-- Formularios -->
+            <div class="col-md-3 mb-4">
+    <div class="card text-white bg-info h-100">
+        <div class="card-body">
+            <h5 class="card-title">Formularios</h5>
+            <p class="card-text display-4">{{ $cantidadFormularios }}</p>
+            <p class="card-text">+{{ $formulariosEsteMes }} este mes</p>
+        </div>
+    </div>
+</div>
 
         <!-- Filtro de fechas -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 p-3 bg-white rounded shadow-sm border">
-                    <label for="desde" class="form-label mb-0 me-2 fw-bold">Desde:</label>
-                    <input type="date" id="desde" name="desde" class="form-control" style="max-width: 180px;" value="{{ $desde ?? '' }}">
-                    <label for="hasta" class="form-label mb-0 ms-3 me-2 fw-bold">Hasta:</label>
-                    <input type="date" id="hasta" name="hasta" class="form-control" style="max-width: 180px;" value="{{ $hasta ?? '' }}">
-                    <button type="submit" class="btn btn-primary ms-3">Filtrar</button>
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary ms-2">Limpiar filtros</a>
-                </form>
+<div class="row mb-3">
+    <div class="col-12">
+        <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 p-3 bg-white rounded shadow-sm border">
+            <!-- Selector de mes -->
+            <div class="input-group me-2" style="max-width: 200px;">
+                <select id="mesSelector" name="mes" class="form-select" aria-label="Selecciona un mes">
+                    <option value="">Selecciona un mes...</option>
+                    <option value="01" {{ request('mes') == '01' ? 'selected' : '' }}>Enero</option>
+                    <option value="02" {{ request('mes') == '02' ? 'selected' : '' }}>Febrero</option>
+                    <option value="03" {{ request('mes') == '03' ? 'selected' : '' }}>Marzo</option>
+                    <option value="04" {{ request('mes') == '04' ? 'selected' : '' }}>Abril</option>
+                    <option value="05" {{ request('mes') == '05' ? 'selected' : '' }}>Mayo</option>
+                    <option value="06" {{ request('mes') == '06' ? 'selected' : '' }}>Junio</option>
+                    <option value="07" {{ request('mes') == '07' ? 'selected' : '' }}>Julio</option>
+                    <option value="08" {{ request('mes') == '08' ? 'selected' : '' }}>Agosto</option>
+                    <option value="09" {{ request('mes') == '09' ? 'selected' : '' }}>Septiembre</option>
+                    <option value="10" {{ request('mes') == '10' ? 'selected' : '' }}>Octubre</option>
+                    <option value="11" {{ request('mes') == '11' ? 'selected' : '' }}>Noviembre</option>
+                    <option value="12" {{ request('mes') == '12' ? 'selected' : '' }}>Diciembre</option>
+                </select>
             </div>
-        </div>
+
+            <!-- Inputs de fecha -->
+            <label for="desde" class="form-label mb-0 me-2 fw-bold">Desde:</label>
+            <input type="date" id="desde" name="desde" class="form-control" style="max-width: 180px;" value="{{ $desde ?? '' }}">
+            <label for="hasta" class="form-label mb-0 ms-3 me-2 fw-bold">Hasta:</label>
+            <input type="date" id="hasta" name="hasta" class="form-control" style="max-width: 180px;" value="{{ $hasta ?? '' }}">
+
+            <!-- Botones -->
+            <button type="submit" class="btn btn-primary ms-3">Filtrar</button>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary ms-2">Limpiar filtros</a>
+        </form>
+    </div>
+</div>
 
         <!-- Gráficos y secciones -->
         <div class="row">
             <div class="col-md-8 mb-4">
                 <div class="card h-100">
                     <div class="card-header bg-light">
-                        Estadísticas de Vehículos
+                        Estadísticas
                     </div>
                     <div class="card-body">
                         <canvas id="vehiculosChart" height="120"></canvas>
@@ -120,16 +145,33 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctx = document.getElementById('vehiculosChart').getContext('2d');
-    var vehiculosChart = new Chart(ctx, {
+    var ctxVehiculos = document.getElementById('vehiculosChart').getContext('2d');
+    var vehiculosChart = new Chart(ctxVehiculos, {
         type: 'bar',
         data: {
-            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
-            datasets: [{
-                label: 'Vehículos registrados',
-                data: [5, 8, 12, 15, 20, 25],
-                backgroundColor: 'rgba(54, 162, 235, 0.7)'
-            }]
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            datasets: [
+                {
+                    label: 'Usuarios',
+                    data: [10, 12, 15, 20, 18, 22], // Reemplaza con tus datos reales
+                    backgroundColor: 'rgba(13, 110, 253, 0.7)' // Azul Bootstrap bg-primary
+                },
+                {
+                    label: 'Vehículos',
+                    data: [5, 8, 12, 15, 20, 25], // Reemplaza con tus datos reales
+                    backgroundColor: 'rgba(25, 135, 84, 0.7)' // Verde Bootstrap bg-success
+                },
+                {
+                    label: 'Alertas',
+                    data: [2, 3, 4, 5, 3, 6], // Reemplaza con tus datos reales
+                    backgroundColor: 'rgba(255, 193, 7, 0.7)' // Amarillo Bootstrap bg-warning
+                },
+                {
+                    label: 'Formularios',
+                    data: [7, 9, 11, 13, 14, 16], // Reemplaza con tus datos reales
+                    backgroundColor: 'rgba(13, 202, 240, 0.7)' // Celeste Bootstrap bg-info
+                }
+            ]
         },
         options: {
             responsive: true,
@@ -138,6 +180,9 @@
             }
         }
     });
+</script>
+
+
     // Script para alternar modo oscuro
     document.addEventListener('DOMContentLoaded', function () {
         const toggle = document.getElementById('darkModeToggle');
