@@ -1,9 +1,5 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use App\Models\Alert;
-use Illuminate\Http\Request;
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
@@ -16,9 +12,6 @@ class DocumentTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
     public function index(Request $request)
     {
         $query = DocumentType::query();
@@ -62,7 +55,6 @@ class DocumentTypeController extends Controller
      */
     public function create()
     {
-        //
         return view('modules.document_type.create');
     }
 
@@ -71,7 +63,6 @@ class DocumentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:document_types',
             'abbreviation' => 'required|string|max:10',
@@ -92,9 +83,6 @@ class DocumentTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Alert $alert)
-    {
-        //
     public function show(DocumentType $documentType)
     {
         return view('modules.document_type.show', compact('documentType'));
@@ -103,9 +91,6 @@ class DocumentTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Alert $alert)
-    {
-        //
     public function edit(DocumentType $documentType)
     {
         return view('modules.document_type.edit', compact('documentType'));
@@ -114,9 +99,6 @@ class DocumentTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Alert $alert)
-    {
-        //
     public function update(Request $request, DocumentType $documentType)
     {
         $validator = Validator::make($request->all(), [
@@ -139,10 +121,6 @@ class DocumentTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Alert $alert)
-    {
-        //
-
     public function destroy(DocumentType $documentType)
     {
         // Verificar si hay usuarios asociados a este tipo de documento

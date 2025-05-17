@@ -1,10 +1,5 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use App\Models\Alert;
-use Illuminate\Http\Request;
-
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
@@ -22,11 +17,6 @@ class AlertController extends Controller
 {
     /**
      * Display a listing of the resource.
-
-     */
-    public function index()
-    {
-        //
      *
      * @return \Illuminate\Http\Response
      */
@@ -74,11 +64,6 @@ class AlertController extends Controller
 
     /**
      * Show the form for creating a new resource.
-
-     */
-    public function create()
-    {
-        //
      *
      * @return \Illuminate\Http\Response
      */
@@ -92,11 +77,6 @@ class AlertController extends Controller
 
     /**
      * Store a newly created resource in storage.
-
-     */
-    public function store(Request $request)
-    {
-        //
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -136,11 +116,6 @@ class AlertController extends Controller
 
     /**
      * Display the specified resource.
-
-     */
-    public function show(Alert $alert)
-    {
-        //
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -153,11 +128,6 @@ class AlertController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-
-     */
-    public function edit(Alert $alert)
-    {
-        //
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -172,11 +142,6 @@ class AlertController extends Controller
 
     /**
      * Update the specified resource in storage.
-
-     */
-    public function update(Request $request, Alert $alert)
-    {
-        //
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -199,10 +164,6 @@ class AlertController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-
-    public function destroy(Alert $alert)
-    {
-        //
     public function destroy($id)
     {
         // Esta función no debe estar disponible para ningún rol
