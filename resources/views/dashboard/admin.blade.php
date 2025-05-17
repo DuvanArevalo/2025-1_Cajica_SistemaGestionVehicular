@@ -51,27 +51,36 @@
 </div>
 
         <!-- Filtro de fechas -->
-<div class="row mb-3">
-    <div class="col-12">
-        <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 p-3 bg-white rounded shadow-sm border">
-            <!-- Selector de mes -->
-            <div class="input-group me-2" style="max-width: 200px;">
-                <select id="mesSelector" name="mes" class="form-select" aria-label="Selecciona un mes">
-                    <option value="">Selecciona un mes...</option>
-                    <option value="01" {{ (request('mes') == '01' || (empty(request('mes')) && date('m') == '01')) ? 'selected' : '' }}>Enero</option>
-                    <option value="02" {{ (request('mes') == '02' || (empty(request('mes')) && date('m') == '02')) ? 'selected' : '' }}>Febrero</option>
-                    <option value="03" {{ (request('mes') == '03' || (empty(request('mes')) && date('m') == '03')) ? 'selected' : '' }}>Marzo</option>
-                    <option value="04" {{ (request('mes') == '04' || (empty(request('mes')) && date('m') == '04')) ? 'selected' : '' }}>Abril</option>
-                    <option value="05" {{ (request('mes') == '05' || (empty(request('mes')) && date('m') == '05')) ? 'selected' : '' }}>Mayo</option>
-                    <option value="06" {{ (request('mes') == '06' || (empty(request('mes')) && date('m') == '06')) ? 'selected' : '' }}>Junio</option>
-                    <option value="07" {{ (request('mes') == '07' || (empty(request('mes')) && date('m') == '07')) ? 'selected' : '' }}>Julio</option>
-                    <option value="08" {{ (request('mes') == '08' || (empty(request('mes')) && date('m') == '08')) ? 'selected' : '' }}>Agosto</option>
-                    <option value="09" {{ (request('mes') == '09' || (empty(request('mes')) && date('m') == '09')) ? 'selected' : '' }}>Septiembre</option>
-                    <option value="10" {{ (request('mes') == '10' || (empty(request('mes')) && date('m') == '10')) ? 'selected' : '' }}>Octubre</option>
-                    <option value="11" {{ (request('mes') == '11' || (empty(request('mes')) && date('m') == '11')) ? 'selected' : '' }}>Noviembre</option>
-                    <option value="12" {{ (request('mes') == '12' || (empty(request('mes')) && date('m') == '12')) ? 'selected' : '' }}>Diciembre</option>
-                </select>
-            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 p-3 bg-white rounded shadow-sm border">
+                        <!-- Selector de año -->
+                        <div class="input-group me-2" style="max-width: 200px;">
+                            <select id="añoSelector" name="año" class="form-select" aria-label="Selecciona un año">
+                                @foreach($añosDisponibles as $añoOption)
+                                    <option value="{{ $añoOption }}" {{ $año == $añoOption ? 'selected' : '' }}>{{ $añoOption }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <!-- Selector de mes -->
+                        <div class="input-group me-2" style="max-width: 200px;">
+                            <select id="mesSelector" name="mes" class="form-select" aria-label="Selecciona un mes">
+                                <option value="">Selecciona un mes...</option>
+                                <option value="01" {{ (request('mes') == '01' || (empty(request('mes')) && date('m') == '01')) ? 'selected' : '' }}>Enero</option>
+                                <option value="02" {{ (request('mes') == '02' || (empty(request('mes')) && date('m') == '02')) ? 'selected' : '' }}>Febrero</option>
+                                <option value="03" {{ (request('mes') == '03' || (empty(request('mes')) && date('m') == '03')) ? 'selected' : '' }}>Marzo</option>
+                                <option value="04" {{ (request('mes') == '04' || (empty(request('mes')) && date('m') == '04')) ? 'selected' : '' }}>Abril</option>
+                                <option value="05" {{ (request('mes') == '05' || (empty(request('mes')) && date('m') == '05')) ? 'selected' : '' }}>Mayo</option>
+                                <option value="06" {{ (request('mes') == '06' || (empty(request('mes')) && date('m') == '06')) ? 'selected' : '' }}>Junio</option>
+                                <option value="07" {{ (request('mes') == '07' || (empty(request('mes')) && date('m') == '07')) ? 'selected' : '' }}>Julio</option>
+                                <option value="08" {{ (request('mes') == '08' || (empty(request('mes')) && date('m') == '08')) ? 'selected' : '' }}>Agosto</option>
+                                <option value="09" {{ (request('mes') == '09' || (empty(request('mes')) && date('m') == '09')) ? 'selected' : '' }}>Septiembre</option>
+                                <option value="10" {{ (request('mes') == '10' || (empty(request('mes')) && date('m') == '10')) ? 'selected' : '' }}>Octubre</option>
+                                <option value="11" {{ (request('mes') == '11' || (empty(request('mes')) && date('m') == '11')) ? 'selected' : '' }}>Noviembre</option>
+                                <option value="12" {{ (request('mes') == '12' || (empty(request('mes')) && date('m') == '12')) ? 'selected' : '' }}>Diciembre</option>
+                            </select>
+                        </div>
 
             <!-- Inputs de fecha -->
             <label for="desde" class="form-label mb-0 me-2 fw-bold">Desde:</label>
@@ -144,10 +153,11 @@
 <!-- Script para el gráfico (usa Chart.js) -->
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<<script>
+<script>
     const ctx = document.getElementById('vehiculosChart').getContext('2d');
-    const datosGrafica = @json($datosGrafica); // Asegúrate de que $datosGrafica sea un array de arrays
-
+    const datosGrafica = JSON.parse('{!! json_encode($datosGrafica) !!}'); // Corregido para evitar error de decorador
+    const añoSeleccionado = '{!! $año !!}'; // Obtener el año seleccionado
+    
     // Nombres de los meses (Ene, Feb, ..., Dic)
     const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
@@ -180,15 +190,36 @@
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
-                y: { beginAtZero: true }
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
             },
             plugins: {
-                legend: { display: true } // Muestra la leyenda para distinguir datasets
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: `Estadísticas del año ${añoSeleccionado}`,
+                    font: {
+                        size: 16
+                    }
+                }
             }
         }
     });
+    
+    // Actualizar automáticamente al cambiar el año
+    document.getElementById('añoSelector').addEventListener('change', function() {
+        this.form.submit();
+    });
 </script>
+@endpush
 
 <script>
     // Script para alternar modo oscuro
