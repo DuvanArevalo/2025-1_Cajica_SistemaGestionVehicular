@@ -58,18 +58,18 @@
             <div class="input-group me-2" style="max-width: 200px;">
                 <select id="mesSelector" name="mes" class="form-select" aria-label="Selecciona un mes">
                     <option value="">Selecciona un mes...</option>
-                    <option value="01" {{ request('mes') == '01' ? 'selected' : '' }}>Enero</option>
-                    <option value="02" {{ request('mes') == '02' ? 'selected' : '' }}>Febrero</option>
-                    <option value="03" {{ request('mes') == '03' ? 'selected' : '' }}>Marzo</option>
-                    <option value="04" {{ request('mes') == '04' ? 'selected' : '' }}>Abril</option>
-                    <option value="05" {{ request('mes') == '05' ? 'selected' : '' }}>Mayo</option>
-                    <option value="06" {{ request('mes') == '06' ? 'selected' : '' }}>Junio</option>
-                    <option value="07" {{ request('mes') == '07' ? 'selected' : '' }}>Julio</option>
-                    <option value="08" {{ request('mes') == '08' ? 'selected' : '' }}>Agosto</option>
-                    <option value="09" {{ request('mes') == '09' ? 'selected' : '' }}>Septiembre</option>
-                    <option value="10" {{ request('mes') == '10' ? 'selected' : '' }}>Octubre</option>
-                    <option value="11" {{ request('mes') == '11' ? 'selected' : '' }}>Noviembre</option>
-                    <option value="12" {{ request('mes') == '12' ? 'selected' : '' }}>Diciembre</option>
+                    <option value="01" {{ (request('mes') == '01' || (empty(request('mes')) && date('m') == '01')) ? 'selected' : '' }}>Enero</option>
+                    <option value="02" {{ (request('mes') == '02' || (empty(request('mes')) && date('m') == '02')) ? 'selected' : '' }}>Febrero</option>
+                    <option value="03" {{ (request('mes') == '03' || (empty(request('mes')) && date('m') == '03')) ? 'selected' : '' }}>Marzo</option>
+                    <option value="04" {{ (request('mes') == '04' || (empty(request('mes')) && date('m') == '04')) ? 'selected' : '' }}>Abril</option>
+                    <option value="05" {{ (request('mes') == '05' || (empty(request('mes')) && date('m') == '05')) ? 'selected' : '' }}>Mayo</option>
+                    <option value="06" {{ (request('mes') == '06' || (empty(request('mes')) && date('m') == '06')) ? 'selected' : '' }}>Junio</option>
+                    <option value="07" {{ (request('mes') == '07' || (empty(request('mes')) && date('m') == '07')) ? 'selected' : '' }}>Julio</option>
+                    <option value="08" {{ (request('mes') == '08' || (empty(request('mes')) && date('m') == '08')) ? 'selected' : '' }}>Agosto</option>
+                    <option value="09" {{ (request('mes') == '09' || (empty(request('mes')) && date('m') == '09')) ? 'selected' : '' }}>Septiembre</option>
+                    <option value="10" {{ (request('mes') == '10' || (empty(request('mes')) && date('m') == '10')) ? 'selected' : '' }}>Octubre</option>
+                    <option value="11" {{ (request('mes') == '11' || (empty(request('mes')) && date('m') == '11')) ? 'selected' : '' }}>Noviembre</option>
+                    <option value="12" {{ (request('mes') == '12' || (empty(request('mes')) && date('m') == '12')) ? 'selected' : '' }}>Diciembre</option>
                 </select>
             </div>
 
@@ -91,7 +91,7 @@
             <div class="col-md-8 mb-4">
                 <div class="card h-100">
                     <div class="card-header bg-light">
-                        Estadísticas
+                        Estadísticas por mes
                     </div>
                     <div class="card-body">
                         <canvas id="vehiculosChart" height="120"></canvas>
@@ -144,32 +144,37 @@
 <!-- Script para el gráfico (usa Chart.js) -->
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    var ctxVehiculos = document.getElementById('vehiculosChart').getContext('2d');
-    var vehiculosChart = new Chart(ctxVehiculos, {
+<<script>
+    const ctx = document.getElementById('vehiculosChart').getContext('2d');
+    const datosGrafica = @json($datosGrafica); // Asegúrate de que $datosGrafica sea un array de arrays
+
+    // Nombres de los meses (Ene, Feb, ..., Dic)
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+    new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            labels: meses,
             datasets: [
                 {
                     label: 'Usuarios',
-                    data: [10, 12, 15, 20, 18, 22], // Reemplaza con tus datos reales
-                    backgroundColor: 'rgba(13, 110, 253, 0.7)' // Azul Bootstrap bg-primary
+                    data: datosGrafica.usuarios,
+                    backgroundColor: 'rgba(13, 110, 253, 0.7)',
                 },
                 {
                     label: 'Vehículos',
-                    data: [5, 8, 12, 15, 20, 25], // Reemplaza con tus datos reales
-                    backgroundColor: 'rgba(25, 135, 84, 0.7)' // Verde Bootstrap bg-success
+                    data: datosGrafica.vehiculos,
+                    backgroundColor: 'rgba(25, 135, 84, 0.7)',
                 },
                 {
                     label: 'Alertas',
-                    data: [2, 3, 4, 5, 3, 6], // Reemplaza con tus datos reales
-                    backgroundColor: 'rgba(255, 193, 7, 0.7)' // Amarillo Bootstrap bg-warning
+                    data: datosGrafica.alertas,
+                    backgroundColor: 'rgba(255, 193, 7, 0.7)',
                 },
                 {
                     label: 'Formularios',
-                    data: [7, 9, 11, 13, 14, 16], // Reemplaza con tus datos reales
-                    backgroundColor: 'rgba(13, 202, 240, 0.7)' // Celeste Bootstrap bg-info
+                    data: datosGrafica.formularios,
+                    backgroundColor: 'rgba(13, 202, 240, 0.7)',
                 }
             ]
         },
@@ -177,12 +182,15 @@
             responsive: true,
             scales: {
                 y: { beginAtZero: true }
+            },
+            plugins: {
+                legend: { display: true } // Muestra la leyenda para distinguir datasets
             }
         }
     });
 </script>
 
-
+<script>
     // Script para alternar modo oscuro
     document.addEventListener('DOMContentLoaded', function () {
         const toggle = document.getElementById('darkModeToggle');
@@ -226,6 +234,14 @@
     background-color: #23272b !important;
     color: #fff !important;
     border-color: #23272b !important;
+}
+
+/* Mantener colores originales de las tarjetas en modo oscuro */
+[data-bs-theme="dark"] .bg-primary,
+[data-bs-theme="dark"] .bg-success,
+[data-bs-theme="dark"] .bg-warning,
+[data-bs-theme="dark"] .bg-info {
+    background-color: var(--bs-primary) !important;
 }
 
 /* Color de texto para inputs y labels en modo oscuro */
