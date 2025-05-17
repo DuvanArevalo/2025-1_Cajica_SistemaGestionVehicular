@@ -2,40 +2,129 @@
 
 @section('content')
 <style>
-@media (prefers-color-scheme: dark) {
-    .card.bg-dark-mode, .card.bg-dark-mode .card-header, .card.bg-dark-mode .card-body, .table.bg-dark-mode {
-        background-color:#525658 !important;
-        color: #fff !important;
-    }
-    .table.bg-dark-mode th, .table.bg-dark-mode td {
-        background-color: #525658 !important;
-        color: #fff !important;
-    }
+/* Estilos base para ambos modos */
+.card {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.card .card-header {
+    background-color: #f8f9fa;
+    color: #000000;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table {
+    color: #000000;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    color: #000000;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+    background-color: #ffffff;
+    color: #000000;
+    border-top: 1px solid #dee2e6;
+}
+
+.table tr:hover td {
+    background-color: #f8f9fa;
+}
+
+/* Estilos para modo oscuro */
+[data-bs-theme="dark"] .card {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .card .card-header {
+    background-color: #363636 !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid #404040;
+}
+
+[data-bs-theme="dark"] .table {
+    color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .table th {
+    background-color: #363636 !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #404040;
+}
+
+[data-bs-theme="dark"] .table td {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border-top: 1px solid #404040;
+}
+
+[data-bs-theme="dark"] .table tr:hover td {
+    background-color: #363636 !important;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: #a0a0a0 !important;
 }
 </style>
+
 <div class="container main-content-bg py-4">
     <h2 class="mb-4">Bienvenido, {{ Auth::user()->name1 }} (Conductor)</h2>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Vehículos Activos</h5>
+                    <p class="display-4">0</p>
+                    <p class="text-muted">Vehículos disponibles</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Mis Formularios</h5>
+                    <p class="display-4">0</p>
+                    <p class="text-muted">Formularios completados</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Formularios del Mes</h5>
+                    <p class="display-4">0</p>
+                    <p class="text-muted">Este mes</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Accesos rápidos -->
     <div class="row mb-4">
         <div class="col-md-4 mb-3">
-            <a class="btn btn-outline-primary w-100" style="pointer-events: none;">
+            <button class="btn btn-outline-primary w-100" disabled>
                 <i class="bi bi-clipboard-plus"></i> Nuevo Formulario Preoperacional
-            </a>
+            </button>
         </div>
         <div class="col-md-4 mb-3">
-            <a class="btn btn-outline-success w-100" style="pointer-events: none;">
+            <button class="btn btn-outline-success w-100" disabled>
                 <i class="bi bi-list-check"></i> Mis Formularios
-            </a>
+            </button>
         </div>
         <div class="col-md-4 mb-3">
-            <a class="btn btn-outline-info w-100" style="pointer-events: none;">
+            <button class="btn btn-outline-info w-100" disabled>
                 <i class="bi bi-truck"></i> Mis Vehículos
-            </a>
+            </button>
         </div>
     </div>
 
-    <!-- Botones solo visuales para alertas -->
+    <!-- Botones de alertas -->
     <div class="row mb-4">
         <div class="col-md-6 mb-3">
             <button class="btn btn-outline-warning w-100" disabled>
@@ -52,12 +141,50 @@
     <!-- Resumen de formularios recientes -->
     <div class="row">
         <div class="col-12">
-            <div class="card h-100 bg-dark-mode">
-                <div class="card-header bg-dark-mode">
+            <div class="card h-100">
+                <div class="card-header">
                     Formularios Preoperacionales Recientes
                 </div>
-                <div class="card-body bg-dark-mode">
-                    <table class="table table-sm table-hover bg-dark-mode">
+                <div class="card-body">
+                    <!-- Filtros de fecha -->
+                    <form method="GET" action="{{ route('conductor.dashboard') }}">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="start_date" class="form-label">Fecha Inicial</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" 
+                                           value="{{ $start_date ?? '' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="end_date" class="form-label">Fecha Final</label>
+                                    <input type="date" class="form-control" id="end_date" name="end_date"
+                                           value="{{ $end_date ?? '' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="month_select" class="form-label">Seleccionar Mes</label>
+                                    <select class="form-select" id="month_select" name="month_select">
+                                        <option value="">Seleccione un mes</option>
+                                        @for($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}" {{ request('month_select') == $i ? 'selected' : '' }}>
+                                                {{ \Carbon\Carbon::create()->month($i)->locale('es')->monthName }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-sm table-hover">
                         <thead>
                             <tr>
                                 <th>Vehículo</th>
