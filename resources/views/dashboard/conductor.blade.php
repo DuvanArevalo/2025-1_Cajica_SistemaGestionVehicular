@@ -119,7 +119,7 @@
         </div>
         <div class="col-md-4 mb-3">
             <button class="btn btn-outline-info w-100" disabled>
-                <i class="bi bi-truck"></i> Mis Vehículos
+                <i class="bi bi-truck"></i> Vehículos
             </button>
         </div>
     </div>
