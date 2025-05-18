@@ -223,4 +223,26 @@
         </div>
     </div>
 </div>
+
+<x-govco-footer />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const monthSelect = document.getElementById('month_select');
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+
+        monthSelect.addEventListener('change', function () {
+            const selectedMonth = parseInt(this.value);
+            if (selectedMonth) {
+                const currentYear = new Date().getFullYear();
+                const startDate = new Date(currentYear, selectedMonth - 1, 1);
+                const endDate = new Date(currentYear, selectedMonth, 0);
+
+                startDateInput.value = startDate.toISOString().split('T')[0];
+                endDateInput.value = endDate.toISOString().split('T')[0];
+            }
+        });
+    });
+</script>
 @endsection
