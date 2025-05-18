@@ -80,7 +80,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Vehículos Activos</h5>
-                    <p class="display-4">0</p>
+                    <p class="display-4">{{ $vehiculosActivos }}</p>
                     <p class="text-muted">Vehículos disponibles</p>
                 </div>
             </div>
@@ -89,7 +89,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Mis Formularios</h5>
-                    <p class="display-4">0</p>
+                    <p class="display-4">{{ $totalFormularios }}</p>
                     <p class="text-muted">Formularios completados</p>
                 </div>
             </div>
@@ -98,7 +98,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Formularios del Mes</h5>
-                    <p class="display-4">0</p>
+                    <p class="display-4">{{ $formulariosDelMes }}</p>
                     <p class="text-muted">Este mes</p>
                 </div>
             </div>
@@ -125,15 +125,10 @@
     </div>
 
     <!-- Botones de alertas -->
-    <div class="row mb-4">
+    <div class="row mb-4 justify-content-center">
         <div class="col-md-6 mb-3">
             <button class="btn btn-outline-warning w-100" disabled>
                 <i class="bi bi-exclamation-triangle"></i> Ver Alertas
-            </button>
-        </div>
-        <div class="col-md-6 mb-3">
-            <button class="btn btn-warning w-100" disabled>
-                <i class="bi bi-plus-circle"></i> Generar Alerta
             </button>
         </div>
     </div>
@@ -196,7 +191,9 @@
                         <tbody>
                             @if(isset($preoperationalForms) && $preoperationalForms->isEmpty())
                                 <tr>
-                                    <td colspan="4"><p class="text-muted text-white-50">No has diligenciado formularios recientemente.</p></td>
+                                    <td colspan="4">
+                                        <p class="text-muted" style="color: #000000;">No has diligenciado formularios recientemente.</p>
+                                    </td>
                                 </tr>
                             @elseif(isset($preoperationalForms))
                                 @foreach($preoperationalForms as $form)
