@@ -12,7 +12,10 @@
                 </div>
                 <br>
                 <div class="mb-3 d-flex justify-content-between align-items-center">
-                    <x-partial.bs-return />
+                    <x-partial.bs-return 
+                        route="{{ Auth::user()->role->name }}.dashboard"
+                        text="Volver al dashboard" 
+                    />
             
                     <a href="{{ route(Auth::user()->role->name . '.alerts.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-1"></i> Nueva Alerta
@@ -94,6 +97,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">FORMULARIO</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">TIPO</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ESTADO</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">FECHA CREACIÓN</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ACCIONES</th>
@@ -102,16 +106,24 @@
                             <tbody>
                                 @forelse($alerts as $alert)
                                     <tr>
-                                        <td class="ps-4">
-                                            <p class="text-xs font-weight-bold mb-0">Formulario #{{ $alert->preoperationalForm->id }}</p>
+                                        <td>
+                                            Formulario #{{ $alert->preoperationalForm->id }} ({{ $alert->preoperationalForm->vehicle->plate }} - {{ $alert->preoperationalForm->vehicle->brand->name }} {{ $alert->preoperationalForm->vehicle->model->name }})
                                         </td>
-                                        <td class="ps-4">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $alert->alertStatus->type }}</p>
+                                        <td>
+                                            <span class="badge 
+                                                @if($alert->alert_type === 'Respuesta') bg-success 
+                                                @else bg-info 
+                                                @endif">
+                                                {{ $alert->alert_type }}
+                                            </span>
                                         </td>
-                                        <td class="ps-4">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $alert->created_at->format('d/m/Y') }}</p>
+                                        <td>
+                                            {{ $alert->alertStatus->type }}
                                         </td>
-                                        <td class="ps-4">
+                                        <td>
+                                            {{ $alert->created_at->format('d/m/Y') }}
+                                        </td>
+                                        <td>
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route(Auth::user()->role->name . '.alerts.show', $alert->id) }}" class="btn btn-sm btn-info">
                                                     <i class="bi bi-eye"></i>
@@ -126,21 +138,20 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center py-4">No hay alertas registradas</td>
+                                        <td colspan="5" class="text-center py-4">No se encontraron alertas</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    
-                    <div class="d-flex justify-content-center mt-3">
-                        {{ $alerts->links() }}
-                    </div>
-                    
-                    <div class="d-flex justify-content-center mt-2">
-                        <p class="text-sm text-secondary">
-                            Mostrando {{ $alerts->firstItem() ?? 0 }} a {{ $alerts->lastItem() ?? 0 }} de {{ $alerts->total() }} resultados
-                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                Mostrando {{ $alerts->firstItem() }} a {{ $alerts->lastItem() }} de {{ $alerts->total() }} resultados
+                            </div>
+                            <div>
+                                {{ $alerts->links() }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

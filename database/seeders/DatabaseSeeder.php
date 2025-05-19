@@ -22,6 +22,11 @@ class DatabaseSeeder extends Seeder
             AlertStatusSeeder::class,
             SectionSeeder::class,
             VehicleTypeSeeder::class,
+            BrandSeeder::class,
+            VehicleModelSeeder::class,
+            VehicleSeeder::class,
+            QuestionSeeder::class,      // Añadimos el seeder de preguntas
+            SectionVehicleTypeSeeder::class, // Añadimos el seeder de relación sección-tipo de vehículo
         ]);
     }
 }

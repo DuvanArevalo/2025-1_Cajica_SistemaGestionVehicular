@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Listado de Preguntas')
+@section('title', 'Preguntas')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -11,7 +11,10 @@
             </div>
             <br>
             <div class="mb-3 d-flex justify-content-between align-items-center">
-                <x-partial.bs-return />
+                <x-partial.bs-return 
+                    route="{{ Auth::user()->role->name }}.dashboard"
+                    text="Volver al dashboard" 
+                />
 
                 <a href="{{ route(Auth::user()->role->name . '.questions.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nueva Pregunta
@@ -28,11 +31,11 @@
                     <form action="{{ route(Auth::user()->role->name . '.questions.index') }}" method="GET" class="row g-3">
                         <div class="col-md-3">
                             <label for="filter_type" class="form-label">Filtrar por:</label>
-                            <select id="filter_type" class="form-select" onchange="toggleFilterFields()">
+                            <select id="filter_type" name="filter_type" class="form-select" onchange="toggleFilterFields()">
                                 <option value="text" {{ request('filter_type') == 'text' ? 'selected' : '' }}>Pregunta</option>
                                 <option value="section" {{ request('filter_type') == 'section' ? 'selected' : '' }}>Sección</option>
                                 <option value="vehicle_type" {{ request('filter_type') == 'vehicle_type' ? 'selected' : '' }}>Tipo de Vehículo</option>
-                                <option value="date_range" {{ request('filter_type') == 'date_range' ? 'selected' : '' }}>Rango de amigos</option>
+                                <option value="date_range" {{ request('filter_type') == 'date_range' ? 'selected' : '' }}>Rango de fechas</option>
                             </select>
                         </div>
                         
@@ -136,20 +139,18 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">No hay preguntas registradas</td>
+                                        <td colspan="5" class="text-center py-4">No se encontraron preguntas</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    
-                    {{-- paginación --}}
-                    <div class="d-flex justify-content-center mt-4">
-                        <div class="pagination-container">
-                            {{ $questions->links() }}
-                            
-                            <div class="text-center mt-2 text-muted">
-                                Mostrando {{ $questions->firstItem() ?? 0 }} a {{ $questions->lastItem() ?? 0 }} de {{ $questions->total() }} resultados
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                Mostrando {{ $questions->firstItem() }} a {{ $questions->lastItem() }} de {{ $questions->total() }} resultados
+                            </div>
+                            <div>
+                                {{ $questions->links() }}
                             </div>
                         </div>
                     </div>

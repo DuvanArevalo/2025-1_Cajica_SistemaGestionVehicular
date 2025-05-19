@@ -24,7 +24,7 @@ class Section extends Model
      */
     public function vehicleTypes()
     {
-        return $this->belongsToMany(VehicleType::class);
+        return $this->belongsToMany(VehicleType::class, 'section_vehicle_type');
     }
 
     /**
@@ -33,6 +33,6 @@ class Section extends Model
      */
     public function questions(): BelongsToMany
     {
-        return $this->belongsToMany(Question::class);
+        return $this->belongsToMany(Question::class, 'question_section');
     }
 }

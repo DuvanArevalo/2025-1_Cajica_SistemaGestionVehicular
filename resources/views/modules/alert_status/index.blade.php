@@ -11,7 +11,11 @@
             </div>
             <br>
             <div class="mb-3 d-flex justify-content-between align-items-center">
-                <x-partial.bs-return />
+                <x-partial.bs-return 
+                    route="{{ Auth::user()->role->name }}.dashboard"
+                    text="Volver al dashboard" 
+                />
+
                 <a href="{{ route('admin.alert-statuses.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nuevo Estado de Alerta
                 </a>
@@ -129,16 +133,15 @@
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $alertStatuses->links() }}
-                    </div>
-                    
-                    <div class="d-flex justify-content-center mt-2">
-                        <p class="text-sm text-secondary">
-                            Mostrando {{ $alertStatuses->firstItem() ?? 0 }} a {{ $alertStatuses->lastItem() ?? 0 }} de {{ $alertStatuses->total() }} resultados
-                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                Mostrando {{ $alertStatuses->firstItem() }} a {{ $alertStatuses->lastItem() }} de {{ $alertStatuses->total() }} resultados
+                            </div>
+                            <div>
+                                {{ $alertStatuses->links() }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

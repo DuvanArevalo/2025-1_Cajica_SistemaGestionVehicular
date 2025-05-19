@@ -11,7 +11,10 @@
             </div>
             <br>
             <div class="mb-3 d-flex justify-content-between align-items-center">
-                <x-partial.bs-return />
+                <x-partial.bs-return 
+                    route="{{ Auth::user()->role->name }}.dashboard"
+                    text="Volver al dashboard" 
+                />
 
                 <a href="{{ route('admin.document-types.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Documento
@@ -124,15 +127,13 @@
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    
-                    {{-- paginación --}}
-                    <div class="d-flex justify-content-center mt-4">
-                        <div class="pagination-container">
-                            {{ $documentTypes->links() }}
-                            
-                            <div class="text-center mt-2 text-muted">
-                                Mostrando {{ $documentTypes->firstItem() ?? 0 }} a {{ $documentTypes->lastItem() ?? 0 }} de {{ $documentTypes->total() }} resultados
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                Mostrando {{ $documentTypes->firstItem() }} a {{ $documentTypes->lastItem() }} de {{ $documentTypes->total() }} resultados
+                            </div>
+                            <div>
+                                {{ $documentTypes->links() }}
                             </div>
                         </div>
                     </div>

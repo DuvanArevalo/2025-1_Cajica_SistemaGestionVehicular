@@ -22,7 +22,7 @@ class Alert extends Model
     /**
      * Get the preoperational form that owns the alert.
      */
-    public function form(): BelongsTo
+    public function preoperationalForm(): BelongsTo
     {
         return $this->belongsTo(PreoperationalForm::class, 'form_id');
     }
