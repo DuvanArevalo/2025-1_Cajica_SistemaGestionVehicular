@@ -26,7 +26,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->boolean('value')->nullable(); // respuesta (0 o 1, NULLable)
+            $table->boolean('value');
 
             $table->timestamps(); // creado_en y actualizado_en
         });

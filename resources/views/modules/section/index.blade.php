@@ -11,7 +11,10 @@
             </div>
             <br>
             <div class="mb-3 d-flex justify-content-between align-items-center">
-                <x-partial.bs-return />
+                <x-partial.bs-return 
+                    route="{{ Auth::user()->role->name }}.dashboard"
+                    text="Volver al dashboard" 
+                />
 
                 <a href="{{ route(Auth::user()->role->name . '.sections.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nueva Sección
@@ -122,20 +125,19 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">No hay secciones registradas</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                
-                {{-- paginación --}}
-                <div class="d-flex justify-content-center mt-4">
-                    <div class="pagination-container">
-                        {{ $sections->links() }}
+                                    <td colspan="4" class="text-center py-4">No se encontraron secciones</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                         
-                        <div class="text-center mt-2 text-muted">
-                            Mostrando {{ $sections->firstItem() ?? 0 }} a {{ $sections->lastItem() ?? 0 }} de {{ $sections->total() }} resultados
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                Mostrando {{ $sections->firstItem() }} a {{ $sections->lastItem() }} de {{ $sections->total() }} resultados
+                            </div>
+                            <div>
+                                {{ $sections->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>

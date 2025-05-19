@@ -5,7 +5,11 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
-        <x-partial.bs-return />
+        <x-partial.bs-return
+            route="{{ Auth::user()->role->name }}.sections.index"
+            class="mb-3"
+            text="Volver al listado"
+        />
 
         <div class="col-12">
             <div class="card mb-4">

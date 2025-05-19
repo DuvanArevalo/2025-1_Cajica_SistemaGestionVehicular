@@ -5,7 +5,11 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
-        <x-partial.bs-return />
+        <x-partial.bs-return 
+            route="{{ Auth::user()->role->name }}.answers.index" 
+            class="mb-3" 
+            text="Volver al listado" 
+        />
 
         <div class="col-12">
             <div class="card mb-4">
@@ -13,6 +17,12 @@
                     <h6>Crear Nueva Respuesta</h6>
                 </div>
                 <div class="card-body">
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    
                     <form action="{{ route(Auth::user()->role->name . '.answers.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
@@ -20,8 +30,10 @@
                             <select class="form-select @error('form_id') is-invalid @enderror" id="form_id" name="form_id" required>
                                 <option value="">Seleccione un formulario</option>
                                 @foreach($forms as $form)
-                                    <option value="{{ $form->id }}" {{ old('form_id') == $form->id ? 'selected' : '' }}>
-                                        Formulario #{{ $form->id }} - {{ $form->created_at->format('d/m/Y') }}
+                                    <option value="{{ $form->id }}" 
+                                        data-sections="{{ $form->vehicle->vehicleType->sections }}"
+                                        {{ old('form_id') == $form->id ? 'selected' : '' }}>
+                                        Formulario #{{ $form->id }} - {{ $form->vehicle->plate }}
                                     </option>
                                 @endforeach
                             </select>
@@ -29,16 +41,21 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="mb-3">
+                            <label for="section_id" class="form-label">Sección</label>
+                            <select class="form-select @error('section_id') is-invalid @enderror" id="section_id" name="section_id" required disabled>
+                                <option value="">Seleccione una sección</option>
+                            </select>
+                            @error('section_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         
                         <div class="mb-3">
                             <label for="question_id" class="form-label">Pregunta</label>
-                            <select class="form-select @error('question_id') is-invalid @enderror" id="question_id" name="question_id" required>
+                            <select class="form-select @error('question_id') is-invalid @enderror" id="question_id" name="question_id" required disabled>
                                 <option value="">Seleccione una pregunta</option>
-                                @foreach($questions as $question)
-                                    <option value="{{ $question->id }}" {{ old('question_id') == $question->id ? 'selected' : '' }}>
-                                        {{ $question->text }}
-                                    </option>
-                                @endforeach
                             </select>
                             @error('question_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -59,12 +76,6 @@
                                     No
                                 </label>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="value" id="value_null" value="" {{ old('value') === null || old('value') === '' ? 'checked' : '' }}>
-                                <label class="form-check-label" for="value_null">
-                                    No responder
-                                </label>
-                            </div>
                             @error('value')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
@@ -82,3 +93,7 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/modules/answer/create.js') }}"></script>
+@endpush

@@ -26,7 +26,7 @@ class Question extends Model
      */
     public function sections(): BelongsToMany
     {
-        return $this->belongsToMany(Section::class);
+        return $this->belongsToMany(Section::class, 'question_section');
     }
 
     /**

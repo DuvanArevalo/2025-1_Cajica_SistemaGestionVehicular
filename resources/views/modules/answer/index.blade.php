@@ -11,7 +11,10 @@
             </div>
             <br>
             <div class="mb-3 d-flex justify-content-between align-items-center">
-                <x-partial.bs-return />
+                <x-partial.bs-return 
+                    route="{{ Auth::user()->role->name }}.dashboard"
+                    text="Volver al dashboard" 
+                />
 
                 <a href="{{ route(Auth::user()->role->name . '.answers.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nueva Respuesta
@@ -31,7 +34,7 @@
                             <select id="filter_type" name="filter_type" class="form-select" onchange="toggleFilterFields()">
                                 <option value="form" {{ request('filter_type') == 'form' ? 'selected' : '' }}>Formulario</option>
                                 <option value="question" {{ request('filter_type') == 'question' ? 'selected' : '' }}>Pregunta</option>
-                                <option value="value" {{ request('filter_type') == 'value' ? 'selected' : '' }}>Valor</option>
+                                <option value="value" {{ request('filter_type') == 'value' ? 'selected' : '' }}>Respuesta</option>
                                 <option value="date_range" {{ request('filter_type') == 'date_range' ? 'selected' : '' }}>Rango de Fechas</option>
                             </select>
                         </div>
@@ -47,12 +50,11 @@
                         </div>
                         
                         <div id="value_filter" class="col-md-6 filter-field d-none">
-                            <label for="value_search" class="form-label">Buscar por valor:</label>
+                            <label for="value_search" class="form-label">Buscar por respuesta:</label>
                             <select class="form-select" id="value_search" name="value_search">
-                                <option value="">Seleccione un valor</option>
+                                <option value="">Seleccione una respuesta</option>
                                 <option value="1" {{ request('value_search') == '1' ? 'selected' : '' }}>Sí</option>
                                 <option value="0" {{ request('value_search') == '0' ? 'selected' : '' }}>No</option>
-                                <option value="null" {{ request('value_search') == 'null' ? 'selected' : '' }}>No respondido</option>
                             </select>
                         </div>
                         
@@ -99,11 +101,19 @@
                         </div>
                     @endif
                     
+                    @if(session('warning'))
+                        <div class="alert alert-warning alert-dismissible fade show mx-4 mt-4" role="alert">
+                            {{ session('warning') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    
                     <div class="table-responsive p-4">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">FORMULARIO</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SECCIÓN/ES</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">PREGUNTA</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RESPUESTA</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">FECHA CREACIÓN</th>
@@ -113,12 +123,15 @@
                             <tbody>
                                 @forelse($answers as $answer)
                                     <tr>
-                                        <td>{{ $answer->form->id }}</td>
+                                        <td>Formulario # {{ $answer->form->id }} - {{ $answer->form->vehicle->plate }} {{ $answer->form->vehicle->brand->name }} {{ $answer->form->vehicle->model->name }}</td>
+                                        <td>
+                                            @foreach($answer->question->sections as $section)
+                                                <span>{{ $section->name }}</span>
+                                            @endforeach
+                                        </td>
                                         <td>{{ Str::limit($answer->question->text, 50) }}</td>
                                         <td>
-                                            @if($answer->value === null)
-                                                <span class="badge bg-secondary">No respondido</span>
-                                            @elseif($answer->value === 1)
+                                            @if($answer->value == 1)
                                                 <span class="badge bg-success">Sí</span>
                                             @else
                                                 <span class="badge bg-danger">No</span>
@@ -140,19 +153,18 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">No hay respuestas registradas</td>
+                                        <td colspan="5" class="text-center py-4">No se encontraron respuestas</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    
-                    <div class="d-flex justify-content-center mt-4">
-                        <div class="pagination-container">
-                            {{ $answers->links() }}
-                            
-                            <div class="text-center mt-2 text-muted">
-                                Mostrando {{ $answers->firstItem() ?? 0 }} a {{ $answers->lastItem() ?? 0 }} de {{ $answers->total() }} resultados
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                Mostrando {{ $answers->firstItem() }} a {{ $answers->lastItem() }} de {{ $answers->total() }} resultados
+                            </div>
+                            <div>
+                                {{ $answers->links() }}
                             </div>
                         </div>
                     </div>

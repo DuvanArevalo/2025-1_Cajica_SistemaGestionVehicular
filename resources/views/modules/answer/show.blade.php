@@ -5,7 +5,11 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
-        <x-partial.bs-return />
+        <x-partial.bs-return 
+            route="{{ Auth::user()->role->name }}.answers.index" 
+            class="mb-3" 
+            text="Volver al listado" 
+        />
 
         <div class="col-12">
             <div class="card mb-4">
@@ -28,7 +32,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <h6 class="text-uppercase text-body text-xs font-weight-bolder">Formulario:</h6>
-                                <p>Formulario #{{ $answer->form->id }} - {{ $answer->form->created_at->format('d/m/Y') }}</p>
+                                <p>Formulario # {{ $answer->form->id }} - {{ $answer->form->vehicle->plate }} {{ $answer->form->vehicle->brand->name }}</p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -42,9 +46,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <h6 class="text-uppercase text-body text-xs font-weight-bolder">Respuesta:</h6>
-                                @if($answer->value === null)
-                                    <span class="badge bg-secondary">No respondido</span>
-                                @elseif($answer->value === 1)
+                                @if($answer->value == 1)
                                     <span class="badge bg-success">Sí</span>
                                 @else
                                     <span class="badge bg-danger">No</span>

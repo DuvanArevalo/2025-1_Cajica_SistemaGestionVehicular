@@ -17,6 +17,9 @@ class VehicleTypeSeeder extends Seeder
      */
     public function run()
     {
+        // Limpiar la tabla antes de insertar
+        DB::table('vehicle_types')->delete();
+        
         $now = Carbon::now();
 
         $vehicleTypes = [
