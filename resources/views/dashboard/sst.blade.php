@@ -2,15 +2,19 @@
 
 @section('title', 'Dashboard SST')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/dashboard/dashboards.css') }}">
+@endpush
+
 @section('content')
-<div class="d-flex" style="min-height: 100vh;">
+<div class="container-fluid main-content-bg py-4">
     <!-- Contenido principal -->
-    <div class="flex-grow-1 p-4 main-content-bg">
+    <div class="px-2 px-md-4">
         <h2 class="mb-4">Panel de SST</h2>
         <div class="row">
             <!-- Tarjetas resumen -->
              <!-- Usuarios -->
-            <div class="col-md-3 mb-4">
+            <div class="col-6 col-md-3 mb-4">
                 <div class="card text-white bg-primary h-100">
                     <div class="card-body">
                         <h5 class="card-title">Usuarios</h5>
@@ -20,7 +24,7 @@
                 </div>
             </div>
             <!-- Vehiculos -->
-            <div class="col-md-3 mb-4">
+            <div class="col-6 col-md-3 mb-4">
                 <div class="card text-white bg-success h-100">
                     <div class="card-body">
                         <h5 class="card-title">Vehículos</h5>
@@ -30,7 +34,7 @@
                 </div>
             </div>
             <!-- Alertas -->
-            <div class="col-md-3 mb-4">
+            <div class="col-6 col-md-3 mb-4">
                 <div class="card text-white bg-warning h-100">
                     <div class="card-body">
                         <h5 class="card-title">Alertas</h5>
@@ -40,7 +44,7 @@
                 </div>
             </div>
             <!-- Formularios -->
-            <div class="col-md-3 mb-4">
+            <div class="col-6 col-md-3 mb-4">
                 <div class="card text-white bg-info h-100">
                     <div class="card-body">
                         <h5 class="card-title">Formularios</h5>
@@ -51,97 +55,99 @@
             </div>
 
             <!-- Filtro de fechas -->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <form method="GET" action="{{ route('sst.dashboard') }}" class="d-flex align-items-center gap-2 p-3 bg-white rounded shadow-sm border">
-                        <!-- Selector de año -->
-                        <div class="input-group me-2" style="max-width: 200px;">
-                            <select id="añoSelector" name="año" class="form-select" aria-label="Selecciona un año">
-                                @foreach($añosDisponibles as $añoOption)
-                                    <option value="{{ $añoOption }}" {{ $año == $añoOption ? 'selected' : '' }}>{{ $añoOption }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                        <!-- Selector de mes -->
-                        <div class="input-group me-2" style="max-width: 200px;">
-                            <select id="mesSelector" name="mes" class="form-select" aria-label="Selecciona un mes">
-                                <option value="">Selecciona un mes...</option>
-                                <option value="01" {{ (request('mes') == '01' || (empty(request('mes')) && date('m') == '01')) ? 'selected' : '' }}>Enero</option>
-                                <option value="02" {{ (request('mes') == '02' || (empty(request('mes')) && date('m') == '02')) ? 'selected' : '' }}>Febrero</option>
-                                <option value="03" {{ (request('mes') == '03' || (empty(request('mes')) && date('m') == '03')) ? 'selected' : '' }}>Marzo</option>
-                                <option value="04" {{ (request('mes') == '04' || (empty(request('mes')) && date('m') == '04')) ? 'selected' : '' }}>Abril</option>
-                                <option value="05" {{ (request('mes') == '05' || (empty(request('mes')) && date('m') == '05')) ? 'selected' : '' }}>Mayo</option>
-                                <option value="06" {{ (request('mes') == '06' || (empty(request('mes')) && date('m') == '06')) ? 'selected' : '' }}>Junio</option>
-                                <option value="07" {{ (request('mes') == '07' || (empty(request('mes')) && date('m') == '07')) ? 'selected' : '' }}>Julio</option>
-                                <option value="08" {{ (request('mes') == '08' || (empty(request('mes')) && date('m') == '08')) ? 'selected' : '' }}>Agosto</option>
-                                <option value="09" {{ (request('mes') == '09' || (empty(request('mes')) && date('m') == '09')) ? 'selected' : '' }}>Septiembre</option>
-                                <option value="10" {{ (request('mes') == '10' || (empty(request('mes')) && date('m') == '10')) ? 'selected' : '' }}>Octubre</option>
-                                <option value="11" {{ (request('mes') == '11' || (empty(request('mes')) && date('m') == '11')) ? 'selected' : '' }}>Noviembre</option>
-                                <option value="12" {{ (request('mes') == '12' || (empty(request('mes')) && date('m') == '12')) ? 'selected' : '' }}>Diciembre</option>
-                            </select>
-                        </div>
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Filtros</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="GET" action="{{ route('sst.dashboard') }}" class="row g-3">
+                            <!-- Selector de año -->
+                            <div class="col-6 col-md-3 mb-2">
+                                <label for="añoSelector" class="form-label">Año:</label>
+                                <select id="añoSelector" name="año" class="form-select" aria-label="Selecciona un año">
+                                    @foreach($añosDisponibles as $añoOption)
+                                        <option value="{{ $añoOption }}" {{ $año == $añoOption ? 'selected' : '' }}>{{ $añoOption }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <!-- Selector de mes -->
+                            <div class="col-6 col-md-3 mb-2">
+                                <label for="mesSelector" class="form-label">Mes:</label>
+                                <select id="mesSelector" name="mes" class="form-select" aria-label="Selecciona un mes">
+                                    <option value="">Selecciona un mes...</option>
+                                    @for($i = 1; $i <= 12; $i++)
+                                        @php
+                                            $mes = str_pad($i, 2, '0', STR_PAD_LEFT);
+                                            $nombreMes = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][$i-1];
+                                        @endphp
+                                        <option value="{{ $mes }}" {{ (request('mes') == $mes || (empty(request('mes')) && date('m') == $mes)) ? 'selected' : '' }}>
+                                            {{ $nombreMes }}
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
 
-                        <!-- Inputs de fecha -->
-                        <label for="desde" class="form-label mb-0 me-2 fw-bold">Desde:</label>
-                        <input type="date" id="desde" name="desde" class="form-control" style="max-width: 180px;" value="{{ $desde ?? '' }}">
-                        <label for="hasta" class="form-label mb-0 ms-3 me-2 fw-bold">Hasta:</label>
-                        <input type="date" id="hasta" name="hasta" class="form-control" style="max-width: 180px;" value="{{ $hasta ?? '' }}">
+                            <!-- Inputs de fecha -->
+                            <div class="col-6 col-md-3 mb-2">
+                                <label for="desde" class="form-label">Desde:</label>
+                                <input type="date" id="desde" name="desde" class="form-control" value="{{ $desde ?? '' }}">
+                            </div>
+                            <div class="col-6 col-md-3 mb-2">
+                                <label for="hasta" class="form-label">Hasta:</label>
+                                <input type="date" id="hasta" name="hasta" class="form-control" value="{{ $hasta ?? '' }}">
+                            </div>
 
-                        <!-- Botones -->
-                        <button type="submit" class="btn btn-primary ms-3">Filtrar</button>
-                        <a href="{{ route('sst.dashboard') }}" class="btn btn-outline-secondary ms-2">Limpiar filtros</a>
-                    </form>
+                            <!-- Botones -->
+                            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+                                <button type="submit" class="btn btn-primary">Filtrar</button>
+                                <a href="{{ route('sst.dashboard') }}" class="btn btn-outline-secondary">Limpiar filtros</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
             <!-- Gráficos y secciones -->
-            <div class="row">
-                <div class="col-md-8 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-light">
-                            Estadísticas por mes
-                        </div>
-                        <div class="card-body">
-                            <canvas id="vehiculosChart" height="500"></canvas>
+            <div class="col-12 col-lg-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-light">
+                        Estadísticas por mes
+                    </div>
+                    <div class="card-body">
+                        <div style="position: relative; height: 50vh; min-height: 300px;">
+                            <canvas id="vehiculosChart"></canvas>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-light">
-                            Accesos Rápidos
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6 col-md-6 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                            <a href="{{ route('sst.users.index') }}" class="btn btn-outline-primary w-100">Gestionar Usuarios</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-6 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                            <a href="{{ route('sst.vehicles.index') }}" class="btn btn-outline-success w-100">Gestionar Vehículos</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-6 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                            <a href="{{ route('sst.alerts.index') }}" class="btn btn-outline-warning w-100">Ver Alertas</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-6 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body d-flex align-items-center justify-content-center p-2">
-                                            <a href="{{ route('sst.preoperational-forms.index') }}" class="btn btn-outline-info w-100">Formularios Preoperacionales</a>
-                                        </div>
-                                    </div>
-                                </div>
+            </div>
+            <div class="col-12 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-light">
+                        Accesos Rápidos
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-6 mb-2">
+                                <a href="{{ route('sst.users.index') }}" class="btn btn-outline-primary w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-people me-2"></i> Usuarios
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="{{ route('sst.vehicles.index') }}" class="btn btn-outline-success w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-truck me-2"></i> Vehículos
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="{{ route('sst.alerts.index') }}" class="btn btn-outline-warning w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-exclamation-triangle me-2"></i> Alertas
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="{{ route('sst.preoperational-forms.index') }}" class="btn btn-outline-info w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-clipboard-check me-2"></i> Formularios
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -151,145 +157,78 @@
     </div>
 </div>
 
-<!-- Script para el gráfico (usa Chart.js) -->
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('vehiculosChart').getContext('2d');
-    const datosGrafica = JSON.parse('{!! json_encode($datosGrafica) !!}'); // Corregido para evitar error de decorador
-    const añoSeleccionado = '{!! $año !!}'; // Obtener el año seleccionado
-    
-    // Nombres de los meses (Ene, Feb, ..., Dic)
-    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+<x-govco-footer />
+@endsection
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: meses,
-            datasets: [
-                {
-                    label: 'Usuarios',
-                    data: datosGrafica.usuarios,
-                    backgroundColor: 'rgba(13, 110, 253, 0.7)',
-                },
-                {
-                    label: 'Vehículos',
-                    data: datosGrafica.vehiculos,
-                    backgroundColor: 'rgba(25, 135, 84, 0.7)',
-                },
-                {
-                    label: 'Alertas',
-                    data: datosGrafica.alertas,
-                    backgroundColor: 'rgba(255, 193, 7, 0.7)',
-                },
-                {
-                    label: 'Formularios',
-                    data: datosGrafica.formularios,
-                    backgroundColor: 'rgba(13, 202, 240, 0.7)',
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('vehiculosChart').getContext('2d');
+        const datosGrafica = JSON.parse('{!! json_encode($datosGrafica) !!}');
+        const añoSeleccionado = '{!! $año !!}';
+
+        // Nombres de los meses
+        const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: meses,
+                datasets: [
+                    {
+                        label: 'Usuarios',
+                        data: datosGrafica.usuarios,
+                        backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                    },
+                    {
+                        label: 'Vehículos',
+                        data: datosGrafica.vehiculos,
+                        backgroundColor: 'rgba(25, 135, 84, 0.7)',
+                    },
+                    {
+                        label: 'Alertas',
+                        data: datosGrafica.alertas,
+                        backgroundColor: 'rgba(255, 193, 7, 0.7)',
+                    },
+                    {
+                        label: 'Formularios',
+                        data: datosGrafica.formularios,
+                        backgroundColor: 'rgba(13, 202, 240, 0.7)',
                     }
-                }
+                ]
             },
-            plugins: {
-                legend: {
-                    position: 'top',
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
                 },
-                title: {
-                    display: true,
-                    text: `Estadísticas del año ${añoSeleccionado}`,
-                    font: {
-                        size: 16
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: `Estadísticas del año ${añoSeleccionado}`,
+                        font: {
+                            size: 16
+                        }
                     }
                 }
             }
-        }
-    });
-    
-    // Actualizar automáticamente al cambiar el año
-    document.getElementById('añoSelector').addEventListener('change', function() {
-        this.form.submit();
-    });
-</script>
+        });
+
+        // Script para alternar modo oscuro y actualización automática
+        document.addEventListener('DOMContentLoaded', function () {
+            // Actualizar al cambiar el año
+            document.getElementById('añoSelector').addEventListener('change', function() {
+                this.form.submit();
+            });
+        });
+    </script>
 @endpush
-
-<!-- Estilos personalizados para la sidebar y contenido principal -->
-@push('styles')
-<style>
-/* Fondo claro por defecto */
-.main-content-bg {
-    background: #f8f9fa;
-}
-
-/* Modo oscuro para toda la página */
-[data-bs-theme="dark"] .main-content-bg {
-    background: #181a1b !important;
-}
-
-/* Fondo negro para tarjetas y formularios en modo oscuro */
-[data-bs-theme="dark"] .card,
-[data-bs-theme="dark"] .bg-white,
-[data-bs-theme="dark"] .form-control,
-[data-bs-theme="dark"] .card-header.bg-light {
-    background-color: #23272b !important;
-    color: #fff !important;
-    border-color: #23272b !important;
-}
-
-/* Mantener colores originales de las tarjetas en modo oscuro */
-[data-bs-theme="dark"] .bg-primary,
-[data-bs-theme="dark"] .bg-success,
-[data-bs-theme="dark"] .bg-warning,
-[data-bs-theme="dark"] .bg-info {
-    background-color: var(--bs-primary) !important;
-}
-
-/* Color de texto para inputs y labels en modo oscuro */
-[data-bs-theme="dark"] .form-label,
-[data-bs-theme="dark"] .form-control,
-[data-bs-theme="dark"] label,
-[data-bs-theme="dark"] input,
-[data-bs-theme="dark"] select,
-[data-bs-theme="dark"] option {
-    color: #fff !important;
-    background-color: #23272b !important;
-    border-color: #444 !important;
-}
-
-/* Botones outline conservan su color en modo oscuro */
-[data-bs-theme="dark"] .btn-outline-primary {
-    color: #0d6efd !important;
-    border-color: #0d6efd !important;
-}
-[data-bs-theme="dark"] .btn-outline-success {
-    color: #198754 !important;
-    border-color: #198754 !important;
-}
-[data-bs-theme="dark"] .btn-outline-warning {
-    color: #ffc107 !important;
-    border-color: #ffc107 !important;
-}
-[data-bs-theme="dark"] .btn-outline-info {
-    color: #0dcaf0 !important;
-    border-color: #0dcaf0 !important;
-}
-[data-bs-theme="dark"] .btn-outline-primary:hover,
-[data-bs-theme="dark"] .btn-outline-success:hover,
-[data-bs-theme="dark"] .btn-outline-warning:hover,
-[data-bs-theme="dark"] .btn-outline-info:hover {
-    background-color: #fff !important;
-    color: #23272b !important;
-}
-</style>
-@endpush
-<x-govco-footer />
-@endsection

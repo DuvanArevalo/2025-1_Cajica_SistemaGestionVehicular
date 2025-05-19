@@ -9,6 +9,8 @@
         <ul class="navbar-nav w-100">
             @php
                 $rolePrefix = strtolower(Auth::user()->role->name);
+                $showAdminSSTItems = in_array($rolePrefix, ['admin', 'sst']);
+                $hasRolesOrUsers = $showAdminSSTItems;
             @endphp
 
             {{-- Dashboard (¡siempre primero!) --}}
@@ -18,28 +20,24 @@
                 </a>
             </li>
 
+            @if($hasRolesOrUsers)
             <li class="nav-item"><hr class="sidebar-divider w-100"></li>
 
             {{-- Roles --}}
-            @if(in_array($rolePrefix, ['admin', 'sst']))
             <li class="nav-item d-flex justify-content-center">
                 <a class="nav-link d-flex align-items-center" href="{{ route($rolePrefix . '.roles.index') }}">
                     <i class="bi bi-shield-lock me-2"></i> Roles
                 </a>
             </li>
-            @endif
 
             {{-- Usuarios --}}
-            @if(in_array($rolePrefix, ['admin', 'sst']))
             <li class="nav-item d-flex justify-content-center">
                 <a class="nav-link d-flex align-items-center" href="{{ route($rolePrefix . '.users.index') }}">
                     <i class="bi bi-people me-2"></i> Usuarios
                 </a>
             </li>
-            @endif
 
             {{-- Tipos de Documento --}}
-            @if(in_array($rolePrefix, ['admin', 'sst']))
             <li class="nav-item d-flex justify-content-center">
                 <a class="nav-link d-flex align-items-center" href="{{ route($rolePrefix . '.document-types.index') }}">
                     <i class="bi bi-card-list me-2"></i> Tipos de Documento
@@ -56,8 +54,8 @@
                 </a>
             </li>
 
-            {{-- Tipos de Vehículo --}}
-            @if(in_array($rolePrefix, ['admin', 'sst']))
+            {{-- Tipos de Vehículo, Marcas y Modelos (solo para admin y sst) --}}
+            @if($showAdminSSTItems)
             <li class="nav-item d-flex justify-content-center">
                 <a class="nav-link d-flex align-items-center" href="{{ route($rolePrefix . '.vehicle-types.index') }}">
                     <i class="bi bi-list-check me-2"></i> Tipos de Vehículo
@@ -88,8 +86,8 @@
                 </a>
             </li>
 
-            {{-- Secciones --}}
-            @if(in_array($rolePrefix, ['admin', 'sst']))
+            {{-- Secciones y Preguntas (solo para admin y sst) --}}
+            @if($showAdminSSTItems)
             <li class="nav-item d-flex justify-content-center">
                 <a class="nav-link d-flex align-items-center" href="{{ route($rolePrefix . '.sections.index') }}">
                     <i class="bi bi-layout-text-sidebar me-2"></i> Secciones
@@ -120,7 +118,7 @@
                     <i class="bi bi-chat-left-text me-2"></i> Mis Observaciones
                 </a>
             </li>
-            @elseif(in_array($rolePrefix, ['admin', 'sst']))
+            @elseif($showAdminSSTItems)
             <li class="nav-item d-flex justify-content-center">
                 <a class="nav-link d-flex align-items-center" href="{{ route($rolePrefix . '.observations.index') }}">
                     <i class="bi bi-chat-left-text me-2"></i> Observaciones
@@ -128,10 +126,10 @@
             </li>
             @endif
 
+            @if($showAdminSSTItems)
             <li class="nav-item"><hr class="sidebar-divider w-100"></li>
 
             {{-- Alertas --}}
-            @if(in_array($rolePrefix, ['admin', 'sst']))
             <li class="nav-item d-flex justify-content-center">
                 <a class="nav-link d-flex align-items-center" href="{{ route($rolePrefix . '.alerts.index') }}">
                     <i class="bi bi-exclamation-triangle me-2"></i> Alertas
