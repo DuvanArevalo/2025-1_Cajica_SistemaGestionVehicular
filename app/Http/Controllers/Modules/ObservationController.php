@@ -21,6 +21,13 @@ class ObservationController extends Controller
     {
         $query = Observation::with(['form.vehicle', 'section']);
 
+        // Filtrar por usuario si es conductor
+        if (strtolower(Auth::user()->role->name) === 'conductor') {
+            $query->whereHas('form', function ($q) {
+                $q->where('user_id', Auth::id());
+            });
+        }
+
         // Aplicar filtros según el tipo seleccionado
         if ($request->filled('filter_type')) {
             switch ($request->filter_type) {

@@ -87,11 +87,11 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
 });
 
 // Grupo para rutas de Conductor
-Route::middleware(['auth', 'role:conductor'])->prefix('conductor')->name('conductor.')->group(function () {
+Route::prefix('conductor')->name('conductor.')->middleware(['auth', 'role:conductor'])->group(function () {
     Route::get('/dashboard', [ConductorController::class, 'index'])->name('dashboard');
     
     // Modulos específicos para Conductor - Acceso limitado
-    Route::resource('vehicles', VehicleController::class)->only(['index']);
+    Route::resource('vehicles', VehicleController::class)->only(['index', 'show']);
     Route::resource('preoperational-forms', PreoperationalFormController::class)->only(['index', 'show', 'create', 'store']);
     Route::resource('answers', AnswerController::class)->only(['index', 'show']);
     Route::resource('observations', ObservationController::class)->only(['index', 'show']);
