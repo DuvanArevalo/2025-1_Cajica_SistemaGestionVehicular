@@ -26,47 +26,88 @@ class PreoperationalFormController extends Controller
      */
     public function index(Request $request)
     {
-        $query = PreoperationalForm::with(['user', 'vehicle']);
-
-        if ($request->has('filter_type')) {
-            switch ($request->filter_type) {
-                case 'user':
-                    if ($request->filled('user_search')) {
-                        $query->whereHas('user', function ($q) use ($request) {
-                            $q->where('name', 'like', '%' . $request->user_search . '%')
-                              ->orWhere('last_name', 'like', '%' . $request->user_search . '%');
-                        });
-                    }
-                    break;
-
-                case 'vehicle':
-                    if ($request->filled('vehicle_search')) {
-                        $query->whereHas('vehicle', function ($q) use ($request) {
-                            $q->where('plate', 'like', '%' . $request->vehicle_search . '%');
-                        });
-                    }
-                    break;
-
-                case 'date_range':
-                    if ($request->filled('date_from')) {
-                        $query->whereDate('created_at', '>=', $request->date_from);
-                    }
-                    if ($request->filled('date_to')) {
-                        $query->whereDate('created_at', '<=', $request->date_to);
-                    }
-                    break;
+        try {
+            $query = PreoperationalForm::with(['user', 'vehicle']);
+            
+            // Si el usuario es conductor, solo mostrar sus propios formularios
+            if (strtolower(Auth::user()->role->name) === 'conductor') {
+                $query->where('user_id', Auth::id());
             }
-        }
+            
+            // Aplicar filtros para todos los roles
+            if ($request->has('filter_type')) {
+                switch ($request->filter_type) {
+                    case 'user':
+                        if ($request->filled('user_search') && strtolower(Auth::user()->role->name) !== 'conductor') {
+                            // Verificar si el término de búsqueda parece una placa de vehículo
+                            if (preg_match('/^[A-Z0-9]{3,7}$/', $request->user_search)) {
+                                return redirect()->route(Auth::user()->role->name . '.preoperational-forms.index')
+                                    ->with('warning', 'El término de búsqueda parece ser una placa de vehículo. Por favor, utilice el filtro de vehículo para buscar por placa.');
+                            }
+                            
+                            $query->whereHas('user', function ($q) use ($request) {
+                                $q->where('name', 'like', '%' . $request->user_search . '%')
+                                  ->orWhere('last_name', 'like', '%' . $request->user_search . '%');
+                            });
+                        }
+                        break;
 
-        $preoperationalForms = $query->orderByDesc('created_at')->paginate(20);
-        return view('modules.preoperational_form.index', compact('preoperationalForms'));
+                    case 'vehicle':
+                        if ($request->filled('vehicle_search')) {
+                            $query->whereHas('vehicle', function ($q) use ($request) {
+                                $q->where('plate', 'like', '%' . $request->vehicle_search . '%')
+                                  ->orWhereHas('brand', function($q2) use ($request) {
+                                      $q2->where('name', 'like', '%' . $request->vehicle_search . '%');
+                                  })
+                                  ->orWhereHas('model', function($q2) use ($request) {
+                                      $q2->where('name', 'like', '%' . $request->vehicle_search . '%');
+                                  })
+                                  ->orWhereHas('vehicleType', function($q2) use ($request) {
+                                      $q2->where('name', 'like', '%' . $request->vehicle_search . '%');
+                                  });
+                            });
+                        }
+                        break;
+
+                    case 'date_range':
+                        if ($request->filled('date_from')) {
+                            $query->whereDate('created_at', '>=', $request->date_from);
+                        }
+                        if ($request->filled('date_to')) {
+                            $query->whereDate('created_at', '<=', $request->date_to);
+                        }
+                        break;
+                }
+            }
+            
+            // Ordenar por fecha de creación descendente (más reciente primero)
+            $query->orderBy('created_at', 'desc');
+            
+            $preoperationalForms = $query->paginate(10);
+            
+            return view('modules.preoperational_form.index', compact('preoperationalForms'));
+            
+        } catch (\Exception $e) {
+            // Capturar cualquier error y mostrar un mensaje amigable
+            return redirect()->route(Auth::user()->role->name . '.preoperational-forms.index')
+                ->with('warning', 'Ha ocurrido un error al procesar su búsqueda. Por favor, verifique los términos utilizados e intente nuevamente.');
+        }
     }
 
     /**
-     * Mostrar detalles de un formulario preoperacional.
+     * Mostrar un formulario preoperacional específico.
      */
-    public function show(PreoperationalForm $preoperationalForm)
+    public function show($id)
     {
+        $preoperationalForm = PreoperationalForm::with(['user', 'vehicle', 'vehicle.brand', 'vehicle.model', 'answers', 'answers.question', 'observations'])
+            ->findOrFail($id);
+        
+        // Si el usuario es conductor, verificar que el formulario le pertenezca
+        if (strtolower(Auth::user()->role->name) === 'conductor' && $preoperationalForm->user_id !== Auth::id()) {
+            return redirect()->route('conductor.preoperational-forms.index')
+                ->with('error', 'No tienes permiso para ver este formulario.');
+        }
+        
         $preoperationalForm->load([
             'user',
             'vehicle.brand',

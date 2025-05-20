@@ -34,21 +34,25 @@
                         <div class="col-md-3">
                             <label for="filter_type" class="form-label">Filtrar por:</label>
                             <select id="filter_type" name="filter_type" class="form-select" onchange="toggleFilterFields()">
-                                <option value="text" {{ request('filter_type') == 'text' ? 'selected' : '' }}>Observación</option>
+                                @if(strtolower(Auth::user()->role->name) != 'conductor')
                                 <option value="form" {{ request('filter_type') == 'form' ? 'selected' : '' }}>Formulario</option>
+                                @endif
+                                <option value="text" {{ request('filter_type') == 'text' ? 'selected' : '' }}>Observación</option>
                                 <option value="section" {{ request('filter_type') == 'section' ? 'selected' : '' }}>Sección</option>
                                 <option value="date_range" {{ request('filter_type') == 'date_range' ? 'selected' : '' }}>Rango de fechas</option>
                             </select>
                         </div>
                         
-                        <div id="text_filter" class="col-md-6 filter-field">
-                            <label for="text_search" class="form-label">Buscar observación:</label>
-                            <input type="text" class="form-control" id="text_search" name="text_search" value="{{ request('text_search') }}">
-                        </div>
-                        
-                        <div id="form_filter" class="col-md-6 filter-field d-none">
+                        @if(strtolower(Auth::user()->role->name) != 'conductor')
+                        <div id="form_filter" class="col-md-6 filter-field">
                             <label for="form_search" class="form-label">Buscar formulario:</label>
                             <input type="text" class="form-control" id="form_search" name="form_search" value="{{ request('form_search') }}">
+                        </div>
+                        @endif
+                        
+                        <div id="text_filter" class="col-md-6 filter-field d-none">
+                            <label for="text_search" class="form-label">Buscar observación:</label>
+                            <input type="text" class="form-control" id="text_search" name="text_search" value="{{ request('text_search') }}">
                         </div>
                         
                         <div id="section_filter" class="col-md-6 filter-field d-none">

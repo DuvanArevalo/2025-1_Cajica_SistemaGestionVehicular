@@ -19,6 +19,13 @@ class AnswerController extends Controller
     {
         $query = Answer::with(['form', 'question']);
 
+        // Filtrar por usuario si es conductor
+        if (strtolower(Auth::user()->role->name) === 'conductor') {
+            $query->whereHas('form', function ($q) {
+                $q->where('user_id', Auth::id());
+            });
+        }
+
         // Filtrar según el tipo seleccionado
         $filterType = $request->filter_type ?? 'form';
 

@@ -20,8 +20,8 @@
                     {{-- Datos generales --}}
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <p><strong>ID:</strong> {{ $preoperationalForm->id }}</p>
-                            <p><strong>Usuario:</strong> {{ $preoperationalForm->user->fullName }}</p>
+                            <p><strong>Formmulario:</strong> {{ $preoperationalForm->id }}</p>
+                            <p><strong>Usuario:</strong> {{ $preoperationalForm->user ? $preoperationalForm->user->fullName : 'Usuario no disponible' }}</p>
                             <p><strong>Vehículo:</strong> {{ $preoperationalForm->vehicle->plate }} – {{ $preoperationalForm->vehicle->brand->name }} {{ $preoperationalForm->vehicle->model->name }}</p>
                         </div>
                         <div class="col-md-6">
@@ -86,10 +86,12 @@
 
                     {{-- Botones --}}
                     <div class="d-flex justify-content-end mt-4">
+                        @if(strtolower(Auth::user()->role->name) != 'conductor')
                         <a href="{{ route(Auth::user()->role->name . '.preoperational-forms.edit', $preoperationalForm->id) }}"
                         class="btn btn-warning">
                             <i class="bi bi-pencil-square me-1"></i>Editar
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>
