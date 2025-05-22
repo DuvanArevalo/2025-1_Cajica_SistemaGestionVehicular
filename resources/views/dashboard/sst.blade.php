@@ -13,13 +13,13 @@
         <h2 class="mb-4">Panel de SST</h2>
         <div class="row">
             <!-- Tarjetas resumen -->
-             <!-- Usuarios -->
+            <!-- Usuarios -->
             <div class="col-6 col-md-3 mb-4">
                 <div class="card text-white bg-primary h-100">
                     <div class="card-body">
                         <h5 class="card-title">Usuarios</h5>
-                        <p class="card-text display-4">{{ $cantidadUsuarios }}</p>  {{-- Total usuarios --}}
-                        <p class="card-text">+{{ $usuariosEsteMes }} este mes</p>   {{-- Nuevos usuarios este mes --}}
+                        <p class="card-text display-4">{{ $cantidadUsuarios }}</p>
+                        <p class="card-text">+{{ $usuariosEsteMes }} este mes</p>
                     </div>
                 </div>
             </div>
@@ -178,22 +178,22 @@
                     {
                         label: 'Usuarios',
                         data: datosGrafica.usuarios,
-                        backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                        backgroundColor: '#0d6efd',
                     },
                     {
                         label: 'Vehículos',
                         data: datosGrafica.vehiculos,
-                        backgroundColor: 'rgba(25, 135, 84, 0.7)',
+                        backgroundColor: '#198754',
                     },
                     {
                         label: 'Alertas',
                         data: datosGrafica.alertas,
-                        backgroundColor: 'rgba(255, 193, 7, 0.7)',
+                        backgroundColor: '#ffc107',
                     },
                     {
                         label: 'Formularios',
                         data: datosGrafica.formularios,
-                        backgroundColor: 'rgba(13, 202, 240, 0.7)',
+                        backgroundColor: '#0dcaf0',
                     }
                 ]
             },

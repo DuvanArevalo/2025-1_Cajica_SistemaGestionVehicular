@@ -178,22 +178,22 @@
                     {
                         label: 'Usuarios',
                         data: datosGrafica.usuarios,
-                        backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                        backgroundColor: '#0d6efd',
                     },
                     {
                         label: 'Vehículos',
                         data: datosGrafica.vehiculos,
-                        backgroundColor: 'rgba(25, 135, 84, 0.7)',
+                        backgroundColor: '#198754',
                     },
                     {
                         label: 'Alertas',
                         data: datosGrafica.alertas,
-                        backgroundColor: 'rgba(255, 193, 7, 0.7)',
+                        backgroundColor: '#ffc107',
                     },
                     {
                         label: 'Formularios',
                         data: datosGrafica.formularios,
-                        backgroundColor: 'rgba(13, 202, 240, 0.7)',
+                        backgroundColor: '#0dcaf0',
                     }
                 ]
             },

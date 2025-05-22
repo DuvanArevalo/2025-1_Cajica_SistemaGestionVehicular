@@ -9,14 +9,11 @@ use App\Models\Vehicle;
 use App\Models\Alert;
 use App\Models\PreoperationalForm;
 use Carbon\Carbon;
-use \Illuminate\Contracts\View\View as View;
+use App\Models\VehicleModel;
 
 class SSTController extends Controller
 {
-    /**
-     * Muestra el dashboard del SST.
-     */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         // Obtener fechas de filtro
         $mes = $request->mes;
@@ -24,7 +21,7 @@ class SSTController extends Controller
         $hasta = $request->hasta;
         
         // Obtener el año seleccionado o usar el año actual por defecto
-        $año = $request->año ?? Carbon::now()->year;
+        $añoSeleccionado = $request->input('año', Carbon::now()->year);
         
         // Consulta base para usuarios
         $usuariosQuery = User::query();
@@ -34,8 +31,8 @@ class SSTController extends Controller
         
         // Aplicar filtros si existen
         if ($mes) {
-            $startDate = Carbon::createFromDate($año, $mes, 1)->startOfMonth();
-            $endDate = Carbon::createFromDate($año, $mes, 1)->endOfMonth();
+            $startDate = Carbon::createFromDate($añoSeleccionado, $mes, 1)->startOfMonth();
+            $endDate = Carbon::createFromDate($añoSeleccionado, $mes, 1)->endOfMonth();
             
             $usuariosQuery->whereBetween('created_at', [$startDate, $endDate]);
             $vehiculosQuery->whereBetween('created_at', [$startDate, $endDate]);
@@ -48,8 +45,8 @@ class SSTController extends Controller
             $formulariosQuery->whereBetween('created_at', [$desde, $hasta]);
         } else {
             // Si no hay filtros, filtrar por el año seleccionado
-            $startOfYear = Carbon::createFromDate($año, 1, 1)->startOfYear();
-            $endOfYear = Carbon::createFromDate($año, 12, 31)->endOfYear();
+            $startOfYear = Carbon::createFromDate($añoSeleccionado, 1, 1)->startOfYear();
+            $endOfYear = Carbon::createFromDate($añoSeleccionado, 12, 31)->endOfYear();
             
             $usuariosQuery->whereBetween('created_at', [$startOfYear, $endOfYear]);
             $vehiculosQuery->whereBetween('created_at', [$startOfYear, $endOfYear]);
@@ -57,105 +54,69 @@ class SSTController extends Controller
             $formulariosQuery->whereBetween('created_at', [$startOfYear, $endOfYear]);
         }
         
-        // Contar totales (sin filtro de año para mostrar el total general)
+        // Contar totales
         $cantidadUsuarios = User::count();
         $cantidadVehiculos = Vehicle::count();
         $cantidadAlertas = Alert::count();
         $cantidadFormularios = PreoperationalForm::count();
         
-        // Contar filtrados por el año o mes seleccionado
+        // Contar filtrados
         $usuariosEsteMes = $usuariosQuery->count();
         $vehiculosEsteMes = $vehiculosQuery->count();
         $alertasEsteMes = $alertasQuery->count();
         $formulariosEsteMes = $formulariosQuery->count();
         
-        // Datos para la gráfica (valores para el año seleccionado)
+        // Datos para la gráfica (pasando el año seleccionado)
         $datosGrafica = [
-            'usuarios' => $this->obtenerDatosHistoricos(User::class, $año),
-            'vehiculos' => $this->obtenerDatosHistoricos(Vehicle::class, $año),
-            'alertas' => $this->obtenerDatosHistoricos(Alert::class, $año),
-            'formularios' => $this->obtenerDatosHistoricos(PreoperationalForm::class, $año)
+            'usuarios' => $this->obtenerDatosHistoricos(User::class, $añoSeleccionado),
+            'vehiculos' => $this->obtenerDatosHistoricos(Vehicle::class, $añoSeleccionado),
+            'alertas' => $this->obtenerDatosHistoricos(Alert::class, $añoSeleccionado),
+            'formularios' => $this->obtenerDatosHistoricos(PreoperationalForm::class, $añoSeleccionado)
         ];
         
-        // Obtener lista de años disponibles para el selector
-        $añosDisponibles = $this->obtenerAñosDisponibles();
+        // Agregar años disponibles (5 años atrás y 2 adelante para flexibilidad)
+        $añoActual = date('Y');
+        $añosDisponibles = range($añoActual - 5, $añoActual + 2);
         
-        return view('dashboard.sst', compact(
-            'cantidadUsuarios',
-            'usuariosEsteMes',
-            'cantidadVehiculos',
-            'vehiculosEsteMes',
-            'cantidadAlertas',
-            'alertasEsteMes',
-            'cantidadFormularios',
-            'formulariosEsteMes',
-            'desde',
-            'hasta',
-            'datosGrafica',
-            'año',
-            'añosDisponibles'
-        ));
+        return view('dashboard.sst', [
+            'cantidadUsuarios' => $cantidadUsuarios,
+            'usuariosEsteMes' => $usuariosEsteMes,
+            'cantidadVehiculos' => $cantidadVehiculos,
+            'vehiculosEsteMes' => $vehiculosEsteMes,
+            'cantidadAlertas' => $cantidadAlertas,
+            'alertasEsteMes' => $alertasEsteMes,
+            'cantidadFormularios' => $cantidadFormularios,
+            'formulariosEsteMes' => $formulariosEsteMes,
+            'desde' => $desde,
+            'hasta' => $hasta,
+            'datosGrafica' => $datosGrafica,
+            'añosDisponibles' => $añosDisponibles,
+            'año' => $añoSeleccionado,
+        ]);
     }
 
     /**
-     * Obtiene datos históricos para la gráfica para un año específico
+     * Obtiene datos históricos para la gráfica
+     * @param string $modelo El modelo a consultar
+     * @param int|null $año El año a filtrar (null para año actual)
      */
-    private function obtenerDatosHistoricos($modelo, $año)
+    private function obtenerDatosHistoricos($modelo, $año = null)
     {
         $datosMensuales = [];
-
+        $año = $año ?? Carbon::now()->year;
+    
         for ($mes = 1; $mes <= 12; $mes++) {
             $inicioMes = Carbon::create($año, $mes, 1)->startOfMonth();
             $finMes = Carbon::create($año, $mes, 1)->endOfMonth();
-
-            $conteo = $modelo::whereBetween('created_at', [$inicioMes, $finMes])->count();
+    
+            // Consulta optimizada usando whereYear y whereMonth
+            $conteo = $modelo::whereYear('created_at', $año)
+                            ->whereMonth('created_at', $mes)
+                            ->count();
+            
             $datosMensuales[] = $conteo;
         }
-
+        
         return $datosMensuales;
-    }
-    
-    /**
-     * Obtiene los años disponibles para el selector
-     * basado en los registros existentes en la base de datos
-     */
-    private function obtenerAñosDisponibles()
-    {
-        // Obtener el año más antiguo de cada modelo
-        $añoMasAntiguoUsuarios = User::min('created_at');
-        $añoMasAntiguoVehiculos = Vehicle::min('created_at');
-        $añoMasAntiguoAlertas = Alert::min('created_at');
-        $añoMasAntiguoFormularios = PreoperationalForm::min('created_at');
-        
-        // Convertir a objetos Carbon
-        $fechas = array_filter([
-            $añoMasAntiguoUsuarios ? Carbon::parse($añoMasAntiguoUsuarios) : null,
-            $añoMasAntiguoVehiculos ? Carbon::parse($añoMasAntiguoVehiculos) : null,
-            $añoMasAntiguoAlertas ? Carbon::parse($añoMasAntiguoAlertas) : null,
-            $añoMasAntiguoFormularios ? Carbon::parse($añoMasAntiguoFormularios) : null
-        ]);
-        
-        // Si no hay fechas, devolver solo el año actual
-        if (empty($fechas)) {
-            return [Carbon::now()->year];
-        }
-        
-        // Encontrar el año más antiguo
-        $añoMasAntiguo = min(array_map(function($fecha) {
-            return $fecha->year;
-        }, $fechas));
-        
-        // Crear array de años desde el más antiguo hasta el actual
-        $añoActual = Carbon::now()->year;
-        $años = [];
-        
-        for ($año = $añoMasAntiguo; $año <= $añoActual; $año++) {
-            $años[] = $año;
-        }
-        
-        // Añadir el próximo año para planificación
-        $años[] = $añoActual + 1;
-        
-        return $años;
     }
 }
