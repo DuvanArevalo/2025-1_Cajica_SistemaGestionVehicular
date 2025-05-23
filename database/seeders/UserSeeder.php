@@ -74,5 +74,18 @@ class UserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+
+        User::updateOrCreate(
+            ['email' => 'conductor2@epc.com'],
+            [
+                'name1' => 'Ivan',
+                'lastname1' => 'Conductor',
+                'password' => Hash::make('Conductor123.'),
+                'document_type_id' => $docTypeCC->id,
+                'document_number' => '1000000004',
+                'role_id' => $conductorRole->id,
+                'is_active' => true,
+            ]
+        );
     }
 }

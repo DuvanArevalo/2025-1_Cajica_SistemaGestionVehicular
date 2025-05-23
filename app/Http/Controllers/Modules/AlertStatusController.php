@@ -43,7 +43,7 @@ class AlertStatusController extends Controller
 
         // Paginamos y mantenemos los filtros en la URL
         $alertStatuses = $query
-            ->paginate(10)
+            ->paginate(20)
             ->appends($request->only(['filter_type', 'type_search', 'description_search', 'date_from', 'date_to']));
 
         return view('modules.alert_status.index', compact('alertStatuses'));

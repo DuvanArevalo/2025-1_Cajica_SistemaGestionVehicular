@@ -21,6 +21,13 @@ class ObservationController extends Controller
     {
         $query = Observation::with(['form.vehicle', 'section']);
 
+        // Filtrar por usuario si es conductor
+        if (strtolower(Auth::user()->role->name) === 'conductor') {
+            $query->whereHas('form', function ($q) {
+                $q->where('user_id', Auth::id());
+            });
+        }
+
         // Aplicar filtros según el tipo seleccionado
         if ($request->filled('filter_type')) {
             switch ($request->filter_type) {
@@ -61,7 +68,7 @@ class ObservationController extends Controller
         $query->orderBy('created_at', 'desc');
 
         // Paginar los resultados
-        $observations = $query->paginate(10);
+        $observations = $query->paginate(20);
 
         return view('modules.observation.index', compact('observations'));
     }
@@ -73,13 +80,13 @@ class ObservationController extends Controller
      */
     public function create()
     {
-        // Obtener todos los formularios preoperacionales
-        $forms = PreoperationalForm::with('vehicle')->get();
+        // Obtener todos los formularios preoperacionales con sus relaciones
+        $forms = PreoperationalForm::with('vehicle.vehicleType.sections')->get();
         
-        // Obtener todas las secciones disponibles
-        $sections = Section::all();
-
-        return view('modules.observation.create', compact('forms', 'sections'));
+        // Ya no necesitamos cargar todas las secciones, se cargarán dinámicamente
+        // según el tipo de vehículo seleccionado
+        
+        return view('modules.observation.create', compact('forms'));
     }
 
     /**
@@ -92,27 +99,59 @@ class ObservationController extends Controller
     {
         // Validar los datos del formulario
         $validated = $request->validate([
-            'form_id' => 'required|exists:forms,id',
+            'form_id' => 'required|exists:preoperational_forms,id',
             'section_id' => 'required|exists:sections,id',
-            'text' => 'required|string|max:500',
+            'text' => 'required|string|min:50|max:500',
+        ], [
+            'form_id.required' => 'El formulario es obligatorio.',
+            'form_id.exists' => 'El formulario seleccionado no existe.',
+            'section_id.required' => 'La sección es obligatoria.',
+            'section_id.exists' => 'La sección seleccionada no existe.',
+            'text.required' => 'La observación es obligatoria.',
+            'text.min' => 'La observación debe tener al menos 50 caracteres.',
+            'text.max' => 'La observación no puede exceder los 500 caracteres.',
         ]);
 
         try {
-            // Crear la nueva observación
-            $observation = new Observation();
-            $observation->form_id = $validated['form_id'];
-            $observation->section_id = $validated['section_id'];
-            $observation->text = $validated['text'];
-            $observation->save();
-
-            return redirect()
-                ->route(strtolower(Auth::user()->role->name) . '.observations.index')
-                ->with('success', 'Observación creada correctamente.');
+            // Cargar información del formulario y sección para mensajes más específicos
+            $form = PreoperationalForm::with('vehicle')->findOrFail($validated['form_id']);
+            $section = Section::findOrFail($validated['section_id']);
+            
+            // Verificar si ya existe una observación para este formulario y sección
+            $existingObservation = Observation::where('form_id', $validated['form_id'])
+                ->where('section_id', $validated['section_id'])
+                ->first();
+            
+            // Información para mensajes
+            $formIdentifier = "Formulario #{$form->id} - {$form->vehicle->plate}";
+            $sectionName = $section->name;
+            
+            if ($existingObservation) {
+                // Actualizar la observación existente
+                $existingObservation->update([
+                    'text' => $validated['text'],
+                ]);
+                
+                return redirect()
+                    ->route(strtolower(Auth::user()->role->name) . '.observations.index')
+                    ->with('warning', "¡Atención! Ya existía una observación para la sección \"{$sectionName}\" del {$formIdentifier} y ha sido actualizada.");
+            } else {
+                // Crear una nueva observación
+                $observation = new Observation();
+                $observation->form_id = $validated['form_id'];
+                $observation->section_id = $validated['section_id'];
+                $observation->text = $validated['text'];
+                $observation->save();
+                
+                return redirect()
+                    ->route(strtolower(Auth::user()->role->name) . '.observations.index')
+                    ->with('success', "Observación creada exitosamente para la sección \"{$sectionName}\" del {$formIdentifier}.");
+            }
         } catch (\Exception $e) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Error al crear la observación: ' . $e->getMessage());
+                ->with('error', 'Error al procesar la observación: ' . $e->getMessage());
         }
     }
 
@@ -142,13 +181,13 @@ class ObservationController extends Controller
         // Obtener la observación a editar
         $observation = Observation::findOrFail($id);
         
-        // Obtener todos los formularios preoperacionales
-        $forms = PreoperationalForm::with('vehicle')->get();
+        // Obtener el formulario preoperacional con el vehículo y su tipo
+        $form = PreoperationalForm::with('vehicle.vehicleType.sections')->findOrFail($observation->form_id);
         
-        // Obtener todas las secciones disponibles
+        // Obtener todas las secciones disponibles para referencia
         $sections = Section::all();
 
-        return view('modules.observation.edit', compact('observation', 'forms', 'sections'));
+        return view('modules.observation.edit', compact('observation', 'form', 'sections'));
     }
 
     /**
@@ -162,22 +201,38 @@ class ObservationController extends Controller
     {
         // Validar los datos del formulario
         $validated = $request->validate([
-            'form_id' => 'required|exists:forms,id',
+            'form_id' => 'required|exists:preoperational_forms,id',
             'section_id' => 'required|exists:sections,id',
-            'text' => 'required|string|max:500',
+            'text' => 'required|string|min:50|max:500',
+        ], [
+            'form_id.required' => 'El formulario es obligatorio.',
+            'form_id.exists' => 'El formulario seleccionado no existe.',
+            'section_id.required' => 'La sección es obligatoria.',
+            'section_id.exists' => 'La sección seleccionada no existe.',
+            'text.required' => 'La observación es obligatoria.',
+            'text.min' => 'La observación debe tener al menos 50 caracteres.',
+            'text.max' => 'La observación no puede exceder los 500 caracteres.',
         ]);
 
         try {
+            // Cargar información del formulario y sección para mensajes más específicos
+            $form = PreoperationalForm::with('vehicle')->findOrFail($validated['form_id']);
+            $section = Section::findOrFail($validated['section_id']);
+            
             // Actualizar la observación
             $observation = Observation::findOrFail($id);
             $observation->form_id = $validated['form_id'];
             $observation->section_id = $validated['section_id'];
             $observation->text = $validated['text'];
             $observation->save();
+            
+            // Información para mensajes
+            $formIdentifier = "Formulario #{$form->id} - {$form->vehicle->plate}";
+            $sectionName = $section->name;
 
             return redirect()
                 ->route(strtolower(Auth::user()->role->name) . '.observations.index')
-                ->with('success', 'Observación actualizada correctamente.');
+                ->with('success', "Observación actualizada exitosamente para la sección \"{$sectionName}\" del {$formIdentifier}.");
         } catch (\Exception $e) {
             return redirect()
                 ->back()
@@ -214,32 +269,6 @@ class ObservationController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'Error al eliminar la observación: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * API endpoint to get sections for a specific form.
-     *
-     * @param  int  $formId
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getSectionsForForm($formId)
-    {
-        try {
-            // Obtener el formulario con su vehículo
-            $form = PreoperationalForm::with('vehicle.vehicleType')->findOrFail($formId);
-            
-            // Obtener el tipo de vehículo
-            $vehicleTypeId = $form->vehicle->vehicleType->id;
-            
-            // Obtener las secciones asociadas a este tipo de vehículo
-            $sections = Section::whereHas('vehicleTypes', function ($query) use ($vehicleTypeId) {
-                $query->where('vehicle_type_id', $vehicleTypeId);
-            })->get();
-            
-            return response()->json($sections);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

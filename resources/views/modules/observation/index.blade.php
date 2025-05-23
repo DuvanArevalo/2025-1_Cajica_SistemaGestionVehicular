@@ -11,7 +11,10 @@
             </div>
             <br>
             <div class="mb-3 d-flex justify-content-between align-items-center">
-                <x-partial.bs-return />
+                <x-partial.bs-return 
+                    route="{{ Auth::user()->role->name }}.dashboard"
+                    text="Volver al dashboard" 
+                />
 
                 @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                 <a href="{{ route(strtolower(Auth::user()->role->name) . '.observations.create') }}" class="btn btn-primary">
@@ -31,21 +34,25 @@
                         <div class="col-md-3">
                             <label for="filter_type" class="form-label">Filtrar por:</label>
                             <select id="filter_type" name="filter_type" class="form-select" onchange="toggleFilterFields()">
-                                <option value="text" {{ request('filter_type') == 'text' ? 'selected' : '' }}>Observación</option>
+                                @if(strtolower(Auth::user()->role->name) != 'conductor')
                                 <option value="form" {{ request('filter_type') == 'form' ? 'selected' : '' }}>Formulario</option>
+                                @endif
+                                <option value="text" {{ request('filter_type') == 'text' ? 'selected' : '' }}>Observación</option>
                                 <option value="section" {{ request('filter_type') == 'section' ? 'selected' : '' }}>Sección</option>
                                 <option value="date_range" {{ request('filter_type') == 'date_range' ? 'selected' : '' }}>Rango de fechas</option>
                             </select>
                         </div>
                         
-                        <div id="text_filter" class="col-md-6 filter-field">
-                            <label for="text_search" class="form-label">Buscar observación:</label>
-                            <input type="text" class="form-control" id="text_search" name="text_search" value="{{ request('text_search') }}">
-                        </div>
-                        
-                        <div id="form_filter" class="col-md-6 filter-field d-none">
+                        @if(strtolower(Auth::user()->role->name) != 'conductor')
+                        <div id="form_filter" class="col-md-6 filter-field">
                             <label for="form_search" class="form-label">Buscar formulario:</label>
                             <input type="text" class="form-control" id="form_search" name="form_search" value="{{ request('form_search') }}">
+                        </div>
+                        @endif
+                        
+                        <div id="text_filter" class="col-md-6 filter-field d-none">
+                            <label for="text_search" class="form-label">Buscar observación:</label>
+                            <input type="text" class="form-control" id="text_search" name="text_search" value="{{ request('text_search') }}">
                         </div>
                         
                         <div id="section_filter" class="col-md-6 filter-field d-none">
@@ -89,6 +96,13 @@
                         </div>
                     @endif
                     
+                    @if(session('warning'))
+                        <div class="alert alert-warning alert-dismissible fade show mx-4 mt-4" role="alert">
+                            {{ session('warning') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    
                     @if(session('error'))
                         <div class="alert alert-danger alert-dismissible fade show mx-4 mt-4" role="alert">
                             {{ session('error') }}
@@ -110,19 +124,19 @@
                             <tbody>
                                 @forelse($observations as $observation)
                                     <tr>
-                                        <td class="ps-4">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $observation->form->id }} ({{ $observation->form->vehicle->license_plate }})</p>
+                                        <td>
+                                            Formulario #{{ $observation->form->id }} - {{ $observation->form->vehicle->plate }} {{ $observation->form->vehicle->brand->name }} {{ $observation->form->vehicle->model->name }}
                                         </td>
-                                        <td class="ps-4">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $observation->section->name }}</p>
+                                        <td>
+                                            {{ $observation->section->name }}
                                         </td>
-                                        <td class="ps-4">
-                                            <p class="text-xs font-weight-bold mb-0">{{ Str::limit($observation->text, 50) }}</p>
+                                        <td>
+                                            {{ Str::limit($observation->text, 25) }}
                                         </td>
-                                        <td class="ps-4">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $observation->created_at->format('d/m/Y') }}</p>
+                                        <td>
+                                            {{ $observation->created_at->format('d/m/Y') }}
                                         </td>
-                                        <td class="ps-4">
+                                        <td>
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route(strtolower(Auth::user()->role->name) . '.observations.show', $observation->id) }}" class="btn btn-sm btn-info">
                                                     <i class="bi bi-eye"></i>
@@ -139,20 +153,18 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No hay observaciones registradas</td>
+                                        <td colspan="5" class="text-center py-4">No se encontraron observaciones</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    
-                    {{-- paginación --}}
-                    <div class="d-flex justify-content-center mt-4">
-                        <div class="pagination-container">
-                            {{ $observations->links() }}
-                            
-                            <div class="text-center mt-2 text-muted">
-                                Mostrando {{ $observations->firstItem() ?? 0 }} a {{ $observations->lastItem() ?? 0 }} de {{ $observations->total() }} resultados
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                Mostrando {{ $observations->firstItem() }} a {{ $observations->lastItem() }} de {{ $observations->total() }} resultados
+                            </div>
+                            <div>
+                                {{ $observations->links() }}
                             </div>
                         </div>
                     </div>

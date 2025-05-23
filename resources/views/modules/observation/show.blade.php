@@ -5,15 +5,11 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-12 mb-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <x-partial.bs-return />
-
-                <div class="card-header">
-                    <h2 class="mb-0">Detalle de Observación</h2>
-                </div>
-            </div>
-        </div>
+        <x-partial.bs-return 
+            route="{{ Auth::user()->role->name }}.observations.index" 
+            class="mb-3" 
+            text="Volver al listado" 
+        />
 
         <div class="col-12">
             <div class="card mb-4">
@@ -30,7 +26,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <h6 class="text-uppercase text-body text-xs font-weight-bolder">Formulario:</h6>
-                                <p>{{ $observation->form->id }} ({{ $observation->form->vehicle->license_plate }})</p>
+                                <p>Formulario #{{ $observation->form->id }} - {{ $observation->form->vehicle->plate }} {{ $observation->form->vehicle->brand->name }} {{ $observation->form->vehicle->model->name }}</p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -57,8 +53,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <h6 class="text-uppercase text-body text-xs font-weight-bolder">Alertas Asociadas:</h6>
-                                <p>{{ $observation->alerts->count() }}</p>
+                                <h6 class="text-uppercase text-body text-xs font-weight-bolder">Estado de Alerta:</h6>
+                                @if($observation->alerts->count() > 0)
+                                    @foreach($observation->alerts as $alert)
+                                        <span class="badge bg-primary">{{ $alert->alertStatus->type }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="badge bg-secondary">Sin alertas</span>
+                                @endif
                             </div>
                         </div>
                     </div>
