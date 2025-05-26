@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,17 @@ class VehicleBrandController extends Controller
      */
     public function index()
     {
-        //
+        $role = Auth::check() ? strtolower(Auth::user()->role->name) : null;
+
+        $dashboardRoute = match($role) {
+            'admin' => route('admin.dashboard'),
+            'sst' => route('sst.dashboard'),
+            'conductor' => route('conductor.dashboard'),
+            default => route('home')
+        };
+
+        $brands = Brand::all();
+        return view('brands.index', compact('brands', 'dashboardRoute'));
     }
 
     /**
@@ -21,7 +32,7 @@ class VehicleBrandController extends Controller
      */
     public function create()
     {
-        //
+        return view('brands.create');
     }
 
     /**
@@ -29,7 +40,13 @@ class VehicleBrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        Brand::create($request->all());
+
+        return redirect()->route('brands.index')->with('success', 'Marca registrada correctamente.');
     }
 
     /**
@@ -43,24 +60,35 @@ class VehicleBrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Brand $brand)
+    public function edit($id)
     {
-        //
+        $brand = Brand::findOrFail($id);
+        return view('brands.edit', compact('brand'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Brand $brand)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $brand = Brand::findOrFail($id);
+        $brand->update($request->all());
+
+        return redirect()->route('brands.index')->with('success', 'Marca actualizada correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Brand $brand)
+    public function destroy($id)
     {
-        //
+        $brand = Brand::findOrFail($id);
+        $brand->delete();
+
+        return redirect()->route('brands.index')->with('success', 'Marca eliminada correctamente.');
     }
 }

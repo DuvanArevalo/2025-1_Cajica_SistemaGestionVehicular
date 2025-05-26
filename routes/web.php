@@ -98,3 +98,17 @@ Route::prefix('conductor')->name('conductor.')->middleware(['auth', 'role:conduc
     Route::resource('answers', AnswerController::class)->only(['index', 'show']);
     Route::resource('observations', ObservationController::class)->only(['index', 'show']);
 });
+
+// Rutas para el registro de vehículos
+Route::get('/catalogo', [VehicleController::class, 'index'])->name('catalogo.index');
+Route::get('/vehiculos/create', [VehicleController::class, 'create'])->name('vehiculos.create');
+Route::post('/vehiculos', [VehicleController::class, 'store'])->name('vehiculos.store');
+
+Route::get('/vehiculos/{id}', [VehicleController::class, 'show'])->name('vehiculos.show');
+Route::get('/vehiculos/{id}/edit', [VehicleController::class, 'edit'])->name('vehiculos.edit');
+Route::put('/vehiculos/{id}', [VehicleController::class, 'update'])->name('vehiculos.update');
+Route::delete('/vehiculos/{id}', [VehicleController::class, 'destroy'])->name('vehiculos.destroy');
+
+Route::resource('vehicle-types', VehicleTypeController::class);
+Route::resource('brands', VehicleBrandController::class);
+Route::resource('vehicle-models', VehicleModelController::class);
