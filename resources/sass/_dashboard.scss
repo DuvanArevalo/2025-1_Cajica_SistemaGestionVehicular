@@ -1,0 +1,216 @@
+// ... existing code ...
+
+/* MODO OSCURO - Complementa los estilos de tema oscuro definidos en bs-themeToggle.scss */
+[data-bs-theme="dark"] {
+    /* Fondo principal */
+    .main-content-bg {
+        background: #181a1b !important;
+    }
+    
+    /* Tarjetas y contenedores */
+    .card {
+        background-color: #23272b !important;
+        color: #e0e0e0 !important;
+        border-color: #343a40 !important;
+    }
+    
+    .card .card-header {
+        background-color: #343a40 !important;
+        color: #e0e0e0 !important;
+        border-bottom: 1px solid #404040 !important;
+    }
+    
+    /* Filtros y encabezados */
+    .card-header h5, 
+    .card-header .mb-0,
+    .card-header h6,
+    h2.mb-4,
+    .form-label,
+    .estadisticas-titulo,
+    .filtros-titulo {
+        color: #e0e0e0 !important;
+    }
+    
+    /* Textos en tarjetas */
+    .card-title, 
+    .card-text,
+    .text-muted,
+    .card p,
+    .card span,
+    .card div,
+    .card strong,
+    .card label {
+        color: #e0e0e0 !important;
+    }
+    
+    /* Tablas */
+    .table {
+        color: #e0e0e0 !important;
+    }
+    
+    .table th {
+        background-color: #343a40 !important;
+        color: #e0e0e0 !important;
+        border-bottom: 2px solid #404040 !important;
+    }
+    
+    .table td {
+        background-color: #23272b !important;
+        color: #e0e0e0 !important;
+        border-top: 1px solid #404040 !important;
+    }
+    
+    .table tr:hover td {
+        background-color: #343a40 !important;
+    }
+    
+    /* Formularios - específicos para dashboards */
+    .form-label,
+    .form-control,
+    label,
+    input,
+    select,
+    option,
+    .form-select {
+        color: #e0e0e0 !important;
+        background-color: #23272b !important;
+        border-color: #444 !important;
+    }
+    
+    /* Inputs de fecha y selects */
+    input[type="date"],
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    select.form-select,
+    textarea.form-control {
+        color: #e0e0e0 !important;
+        background-color: #2c3034 !important;
+        border-color: #495057 !important;
+    }
+    
+    /* Elementos específicos que necesitan contraste */
+    #last_mileage_display,
+    .bg-light,
+    .card-header.bg-light,
+    .card-header.bg-light h6,
+    .card-header.bg-light .mb-0 {
+        background-color: #343a40 !important;
+        color: #e0e0e0 !important;
+    }
+    
+    /* Mantener colores originales de las tarjetas pero mejorar contraste */
+    .card.bg-primary {
+        background-color: #0d6efd !important;
+    }
+    
+    .card.bg-success {
+        background-color: #198754 !important;
+    }
+    
+    .card.bg-warning {
+        background-color: #ffc107 !important;
+    }
+    
+    .card.bg-info {
+        background-color: #0dcaf0 !important;
+    }
+    
+    /* Textos en tarjetas de colores */
+    .card.bg-primary .card-title,
+    .card.bg-primary .card-text,
+    .card.bg-primary p,
+    .card.bg-primary span,
+    .card.bg-primary div,
+    .card.bg-success .card-title,
+    .card.bg-success .card-text,
+    .card.bg-success p,
+    .card.bg-success span,
+    .card.bg-success div,
+    .card.bg-info .card-title,
+    .card.bg-info .card-text,
+    .card.bg-info p,
+    .card.bg-info span,
+    .card.bg-info div {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    .card.bg-warning .card-title,
+    .card.bg-warning .card-text,
+    .card.bg-warning p,
+    .card.bg-warning span,
+    .card.bg-warning div {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Botones en modo oscuro */
+    .btn-outline-primary {
+        color: #0d6efd !important;
+        border-color: #0d6efd !important;
+    }
+    
+    .btn-outline-success {
+        color: #198754 !important;
+        border-color: #198754 !important;
+    }
+    
+    .btn-outline-warning {
+        color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+    
+    .btn-outline-info {
+        color: #0dcaf0 !important;
+        border-color: #0dcaf0 !important;
+    }
+    
+    .btn-outline-secondary {
+        color: #adb5bd !important;
+        border-color: #6c757d !important;
+    }
+    
+    /* Hover de botones outline */
+    .btn-outline-primary:hover,
+    .btn-outline-success:hover,
+    .btn-outline-info:hover,
+    .btn-outline-secondary:hover {
+        color: #ffffff !important;
+    }
+    
+    .btn-outline-warning:hover {
+        color: #000000 !important;
+    }
+    
+    /* Filtros específicos */
+    .filtros-titulo,
+    .estadisticas-titulo {
+        background-color: #343a40 !important;
+        padding: 0.75rem 1rem;
+        border-radius: 0.25rem 0.25rem 0 0;
+        margin-bottom: 0;
+    }
+    
+    /* Corrección para textos en tablas y elementos específicos */
+    .text-muted,
+    .text-white-50 {
+        color: #adb5bd !important;
+    }
+    
+    /* Corrección para elementos específicos de filtros */
+    #filtros .card-body,
+    #filtros label,
+    #filtros select,
+    #filtros input {
+        color: #e0e0e0 !important;
+    }
+    
+    /* Corrección para gráficas y estadísticas */
+    .estadisticas-titulo,
+    .estadisticas-por-mes {
+        color: #e0e0e0 !important;
+    }
+}

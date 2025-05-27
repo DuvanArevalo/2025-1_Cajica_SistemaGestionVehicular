@@ -30,12 +30,12 @@ class VehicleSeeder extends Seeder
                 'plate' => 'ABC123',
                 'mileage' => 15000,
                 'is_active' => true,
-                'soat' => $now->addMonths(6)->toDateTimeString(),
+                'soat' => (clone $now)->addMonths(6)->toDateTimeString(),
                 'soat_status' => true,
-                'mechanical_review' => $now->addMonths(8)->toDateTimeString(),
+                'mechanical_review' => (clone $now)->addMonths(8)->toDateTimeString(),
                 'mechanical_review_status' => true,
-                'created_at' => $now,
-                'updated_at' => $now
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString()
             ],
             [
                 'vehicle_type_id' => 2, // Camioneta
@@ -47,12 +47,12 @@ class VehicleSeeder extends Seeder
                 'plate' => 'DEF456',
                 'mileage' => 25000,
                 'is_active' => true,
-                'soat' => $now->addMonths(3)->toDateTimeString(),
+                'soat' => (clone $now)->addMonths(3)->toDateTimeString(),
                 'soat_status' => true,
-                'mechanical_review' => $now->addMonths(5)->toDateTimeString(),
+                'mechanical_review' => (clone $now)->addMonths(5)->toDateTimeString(),
                 'mechanical_review_status' => true,
-                'created_at' => $now,
-                'updated_at' => $now
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString()
             ],
             [
                 'vehicle_type_id' => 3, // Camión
@@ -64,12 +64,12 @@ class VehicleSeeder extends Seeder
                 'plate' => 'GHI789',
                 'mileage' => 35000,
                 'is_active' => true,
-                'soat' => $now->addMonths(9)->toDateTimeString(),
+                'soat' => (clone $now)->addMonths(9)->toDateTimeString(),
                 'soat_status' => true,
-                'mechanical_review' => $now->addMonths(10)->toDateTimeString(),
+                'mechanical_review' => (clone $now)->addMonths(10)->toDateTimeString(),
                 'mechanical_review_status' => true,
-                'created_at' => $now,
-                'updated_at' => $now
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString()
             ],
             [
                 'vehicle_type_id' => 4, // Motocicleta
@@ -81,12 +81,12 @@ class VehicleSeeder extends Seeder
                 'plate' => 'ABC12D',
                 'mileage' => 5000,
                 'is_active' => true,
-                'soat' => $now->addMonths(8)->toDateTimeString(),
+                'soat' => (clone $now)->addMonths(8)->toDateTimeString(),
                 'soat_status' => true,
-                'mechanical_review' => $now->addMonths(10)->toDateTimeString(),
+                'mechanical_review' => (clone $now)->addMonths(10)->toDateTimeString(),
                 'mechanical_review_status' => true,
-                'created_at' => $now,
-                'updated_at' => $now
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString()
             ],
             [
                 'vehicle_type_id' => 4, // Motocicleta
@@ -98,12 +98,12 @@ class VehicleSeeder extends Seeder
                 'plate' => 'XYZ98E',
                 'mileage' => 8000,
                 'is_active' => true,
-                'soat' => $now->addMonths(5)->toDateTimeString(),
+                'soat' => (clone $now)->addMonths(5)->toDateTimeString(),
                 'soat_status' => true,
-                'mechanical_review' => $now->addMonths(7)->toDateTimeString(),
+                'mechanical_review' => (clone $now)->addMonths(7)->toDateTimeString(),
                 'mechanical_review_status' => true,
-                'created_at' => $now,
-                'updated_at' => $now
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString()
             ],
         ];
 

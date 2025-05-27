@@ -53,19 +53,8 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <h6 class="text-uppercase text-body text-xs font-weight-bolder">Estado de Alerta:</h6>
-                                @if($answer->alerts->count() > 0)
-                                    @foreach($answer->alerts as $alert)
-                                        <span class="badge bg-primary">{{ $alert->alertStatus->type }}</span>
-                                    @endforeach
-                                @else
-                                    <span class="badge bg-secondary">Sin alertas</span>
-                                @endif
-                            </div>
-                        </div>
                     </div>
+                    
                     @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="{{ route(Auth::user()->role->name . '.answers.edit', $answer->id) }}" class="btn btn-warning">

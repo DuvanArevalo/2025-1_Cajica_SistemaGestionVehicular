@@ -34,21 +34,17 @@
                         <div class="col-md-3">
                             <label for="filter_type" class="form-label">Filtrar por:</label>
                             <select id="filter_type" name="filter_type" class="form-select" onchange="toggleFilterFields()">
-                                @if(strtolower(Auth::user()->role->name) != 'conductor')
                                 <option value="form" {{ request('filter_type') == 'form' ? 'selected' : '' }}>Formulario</option>
-                                @endif
                                 <option value="question" {{ request('filter_type') == 'question' ? 'selected' : '' }}>Pregunta</option>
                                 <option value="value" {{ request('filter_type') == 'value' ? 'selected' : '' }}>Respuesta</option>
                                 <option value="date_range" {{ request('filter_type') == 'date_range' ? 'selected' : '' }}>Rango de Fechas</option>
                             </select>
                         </div>
                         
-                        @if(strtolower(Auth::user()->role->name) != 'conductor')
                         <div id="form_filter" class="col-md-6 filter-field">
                             <label for="form_search" class="form-label">Buscar por formulario:</label>
                             <input type="text" class="form-control" id="form_search" name="form_search" value="{{ request('form_search') }}">
                         </div>
-                        @endif
                         
                         <div id="question_filter" class="col-md-6 filter-field d-none">
                             <label for="question_search" class="form-label">Buscar por pregunta:</label>
@@ -161,7 +157,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center py-4">No se encontraron respuestas</td>
+                                        <td colspan="5" class="text-center py-4">No se encontraron respuestas</td>
                                     </tr>
                                 @endforelse
                             </tbody>
