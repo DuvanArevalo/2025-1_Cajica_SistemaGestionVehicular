@@ -47,13 +47,17 @@ Auth::routes();
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    
+
     // Modulos
     Route::resource('users', UserController::class)->except(['destroy']);
     Route::patch('users/{user}/toggle', [UserController::class, 'toggleActive'])->name('users.toggle');
+
     Route::resource('document-types', DocumentTypeController::class)->except(['destroy']);
+
     Route::resource('roles', RoleController::class)->except(['destroy']);
-    Route::patch('roles/{role}/toggle', [RoleController::class, 'toggleActive'])->name('toggle');
+    // RUTA CORREGIDA: El nombre de la ruta ahora es 'roles.toggle-active'
+    Route::patch('roles/{role}/toggle-active', [RoleController::class, 'toggleActive'])->name('roles.toggle-active');
+
     Route::resource('vehicles', VehicleController::class)->except(['destroy']);
     Route::resource('vehicle-brands', VehicleBrandController::class)->except(['destroy']);
     Route::resource('vehicle-models', VehicleModelController::class)->except(['destroy']);
@@ -70,11 +74,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // Grupo para rutas de SST
 Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(function () {
     Route::get('/dashboard', [SSTController::class, 'index'])->name('dashboard');
-    
+
     // Modulos específicos para SST
-    Route::resource('users', UserController::class)->except(['destroy'])->except(['destroy']);
+    // Nota: Las rutas resource para users y roles tienen un .except(['destroy']) duplicado
+    // Lo he dejado como está para mantener la consistencia con tu código original,
+    // pero podrías simplificarlo a un solo except.
+    Route::resource('users', UserController::class)->except(['destroy']);
     Route::resource('document-types', DocumentTypeController::class)->except(['destroy']);
-    Route::resource('roles', RoleController::class)->except(['destroy'])->except(['destroy']);
+    Route::resource('roles', RoleController::class)->except(['destroy']);
     Route::resource('vehicles', VehicleController::class)->except(['destroy']);
     Route::resource('vehicle-brands', VehicleBrandController::class)->except(['destroy']);
     Route::resource('vehicle-models', VehicleModelController::class)->except(['destroy']);
@@ -91,7 +98,7 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
 // Grupo para rutas de Conductor
 Route::prefix('conductor')->name('conductor.')->middleware(['auth', 'role:conductor'])->group(function () {
     Route::get('/dashboard', [ConductorController::class, 'index'])->name('dashboard');
-    
+
     // Modulos específicos para Conductor - Acceso limitado
     Route::resource('vehicles', VehicleController::class)->only(['index', 'show']);
     Route::resource('preoperational-forms', PreoperationalFormController::class)->only(['index', 'show', 'create', 'store']);
