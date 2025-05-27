@@ -85,12 +85,14 @@
                     @endforeach
 
                     {{-- Botones --}}
+                    @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                     <div class="d-flex justify-content-end mt-4">
                         <a href="{{ route(Auth::user()->role->name . '.preoperational-forms.edit', $preoperationalForm->id) }}"
                         class="btn btn-warning">
                             <i class="bi bi-pencil-square me-1"></i>Editar
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

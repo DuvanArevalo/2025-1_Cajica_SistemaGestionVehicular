@@ -41,7 +41,6 @@
                 </div>
             </div>
 
-            <!-- Accesos rápidos -->
             <div class="col-12 col-lg-8 mb-4">
                 <div class="card h-100">
                     <div class="card-header bg-light">
@@ -53,21 +52,21 @@
                             <div class="col-12 col-md-4">
                                 <label for="start_date" class="form-label">Fecha Inicial</label>
                                 <input type="date" class="form-control" id="start_date" name="start_date" 
-                                       value="{{ $start_date ?? '' }}">
+                                value="{{ $start_date ?? '' }}">
                             </div>
                             <div class="col-12 col-md-4">
                                 <label for="end_date" class="form-label">Fecha Final</label>
                                 <input type="date" class="form-control" id="end_date" name="end_date"
-                                       value="{{ $end_date ?? '' }}">
+                                value="{{ $end_date ?? '' }}">
                             </div>
                             <div class="col-12 col-md-3">
                                 <label for="month_select" class="form-label">Seleccionar Mes</label>
                                 <select class="form-select" id="month_select" name="month_select">
                                     <option value="">Seleccione un mes</option>
                                     @for($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}" {{ request('month_select') == $i ? 'selected' : '' }}>
-                                            {{ \Carbon\Carbon::create()->month($i)->locale('es')->monthName }}
-                                        </option>
+                                    <option value="{{ $i }}" {{ request('month_select') == $i ? 'selected' : '' }}>
+                                        {{ \Carbon\Carbon::create()->month($i)->locale('es')->monthName }}
+                                    </option>
                                     @endfor
                                 </select>
                             </div>
@@ -90,26 +89,26 @@
                                 </thead>
                                 <tbody>
                                     @if(isset($preoperationalForms) && $preoperationalForms->isEmpty())
-                                        <tr>
-                                            <td colspan="4">
-                                                <p class="text-muted">No has diligenciado formularios recientemente.</p>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <p class="text-muted">No has diligenciado formularios recientemente.</p>
+                                        </td>
+                                    </tr>
                                     @elseif(isset($preoperationalForms))
-                                        @foreach($preoperationalForms as $form)
-                                            <tr>
-                                                <td>{{ $form->vehicle->plate ?? 'N/A' }}</td>
-                                                <td>{{ $form->created_at->format('d/m/Y H:i') }}</td>
-                                                <td>{{ $form->new_mileage }}</td>
-                                                <td>
-                                                    <a href="{{ route('conductor.preoperational-forms.show', $form->id) }}" class="btn btn-sm btn-outline-info">
-                                                        Ver
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                    @foreach($preoperationalForms as $form)
+                                    <tr>
+                                        <td>{{ $form->vehicle->plate ?? 'N/A' }}</td>
+                                        <td>{{ $form->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{ $form->new_mileage }}</td>
+                                        <td>
+                                            <a href="{{ route('conductor.preoperational-forms.show', $form->id) }}" class="btn btn-sm btn-outline-info">
+                                                Ver
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                     @else
-                                        <tr>
+                                    <tr>
                                             <td colspan="4"><p class="text-muted">No hay datos para mostrar.</p></td>
                                         </tr>
                                     @endif
@@ -120,6 +119,7 @@
                 </div>
             </div>
             
+            <!-- Accesos rápidos -->
             <div class="col-12 col-lg-4 mb-4">
                 <div class="card h-100">
                     <div class="card-header bg-light">

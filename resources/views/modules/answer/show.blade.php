@@ -54,11 +54,14 @@
                             </div>
                         </div>
                     </div>
+                    
+                    @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="{{ route(Auth::user()->role->name . '.answers.edit', $answer->id) }}" class="btn btn-warning">
                             <i class="bi bi-pencil me-1"></i> Editar
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

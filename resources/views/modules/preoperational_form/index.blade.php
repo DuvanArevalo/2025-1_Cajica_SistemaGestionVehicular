@@ -15,10 +15,11 @@
                     route="{{ Auth::user()->role->name }}.dashboard"
                     text="Volver al dashboard" 
                 />
-
+                @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                 <a href="{{ route(Auth::user()->role->name . '.preoperational-forms.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nuevo Formulario
                 </a>
+                @endif
             </div>
         </div>
 
@@ -117,10 +118,12 @@
                                                     <i class="bi bi-eye"></i>
                                                     Ver
                                                 </a>
+                                                @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                                                 <a href="{{ route(Auth::user()->role->name . '.preoperational-forms.edit', $form->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i>
                                                     Editar
                                                 </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

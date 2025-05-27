@@ -16,9 +16,11 @@
                     text="Volver al dashboard" 
                 />
 
+                @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                 <a href="{{ route(Auth::user()->role->name . '.answers.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nueva Respuesta
                 </a>
+                @endif
             </div>
         </div>
 
@@ -144,10 +146,12 @@
                                                     <i class="bi bi-eye"></i>
                                                     Ver
                                                 </a>
+                                                @if(in_array(strtolower(Auth::user()->role->name), ['admin', 'sst']))
                                                 <a href="{{ route(Auth::user()->role->name . '.answers.edit', $answer->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i>
                                                     Editar
                                                 </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
