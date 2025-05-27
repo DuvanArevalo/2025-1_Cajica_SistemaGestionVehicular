@@ -53,8 +53,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <h6 class="text-uppercase text-body text-xs font-weight-bolder">Alertas Asociadas:</h6>
-                                <p>{{ $observation->alerts->count() }}</p>
+                                <h6 class="text-uppercase text-body text-xs font-weight-bolder">Estado de Alerta:</h6>
+                                @if($observation->alerts->count() > 0)
+                                    @foreach($observation->alerts as $alert)
+                                        <span class="badge bg-primary">{{ $alert->alertStatus->type }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="badge bg-secondary">Sin alertas</span>
+                                @endif
                             </div>
                         </div>
                     </div>
