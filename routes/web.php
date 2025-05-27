@@ -50,6 +50,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Modulos
     Route::resource('users', UserController::class)->except(['destroy']);
+    Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::resource('document-types', DocumentTypeController::class)->except(['destroy']);
     Route::resource('roles', RoleController::class)->except(['destroy']);
     Route::resource('vehicles', VehicleController::class)->except(['destroy']);
@@ -70,9 +71,10 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
     Route::get('/dashboard', [SSTController::class, 'index'])->name('dashboard');
     
     // Modulos específicos para SST
-    Route::resource('users', UserController::class)->except(['destroy'])->middleware('restrict.admin.sst');
+    Route::resource('users', UserController::class)->except(['destroy'])->middleware('restrictAdminSSTRoles');
+    Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::resource('document-types', DocumentTypeController::class)->except(['destroy']);
-    Route::resource('roles', RoleController::class)->except(['destroy'])->middleware('restrict.admin.sst');
+    Route::resource('roles', RoleController::class)->except(['destroy'])->middleware('restrictAdminSSTRoles');
     Route::resource('vehicles', VehicleController::class)->except(['destroy']);
     Route::resource('vehicle-brands', VehicleBrandController::class)->except(['destroy']);
     Route::resource('vehicle-models', VehicleModelController::class)->except(['destroy']);
