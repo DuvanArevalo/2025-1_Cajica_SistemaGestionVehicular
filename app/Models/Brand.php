@@ -23,12 +23,18 @@ class Brand extends Model
     protected $fillable = [
         'name',
     ];
-     // Una marca puede tener muchos vehículos. 
-     public function vehicles(): HasMany
-     {
+    // Una marca puede tener muchos vehículos. 
+    public function vehicles(): HasMany
+    {
         // Asume una clave foránea 'brand_id' en la tabla 'vehicles'
         return $this->hasMany(Vehicle::class);
-     }
+    }
+    
+    // Una marca puede tener muchos modelos de vehículos
+    public function vehicleModels(): HasMany
+    {
+        return $this->hasMany(VehicleModel::class, 'brand_id');
+    }
 
     // No se necesitan casts específicos basados en la migración.
     // Timestamps (created_at, updated_at) son manejados automáticamente.

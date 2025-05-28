@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Controllers\Controller;
 use App\Models\DocumentType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DocumentTypeController extends Controller
@@ -69,14 +70,14 @@ class DocumentTypeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.document-types.create')
+            return redirect()->route(Auth::user()->role->name .'.document-types.create')
                 ->withErrors($validator)
                 ->withInput();
         }
 
         DocumentType::create($request->all());
 
-        return redirect()->route('admin.document-types.index')
+        return redirect()->route(Auth::user()->role->name .'.document-types.index')
             ->with('success', 'Tipo de documento creado exitosamente.');
     }
 
@@ -107,14 +108,14 @@ class DocumentTypeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.document-types.edit', $documentType->id)
+            return redirect()->route(Auth::user()->role->name .'.document-types.edit', $documentType->id)
                 ->withErrors($validator)
                 ->withInput();
         }
 
         $documentType->update($request->all());
 
-        return redirect()->route('admin.document-types.index')
+        return redirect()->route(Auth::user()->role->name .'.document-types.index')
             ->with('success', 'Tipo de documento: '.$documentType->name.' actualizado  exitosamente.');
     }
 
@@ -125,16 +126,16 @@ class DocumentTypeController extends Controller
     {
         // Verificar si hay usuarios asociados a este tipo de documento
         if ($documentType->users()->count() > 0) {
-            return redirect()->route('admin.document-types.index')
+            return redirect()->route(Auth::user()->role->name .'.document-types.index')
                 ->with('error', 'No se puede eliminar este Tipo de Documento porque hay usuarios asociados.');
         }
 
         try {
             $documentType->delete();
-            return redirect()->route('admin.document-types.index')
+            return redirect()->route(Auth::user()->role->name .'.document-types.index')
                 ->with('success', 'Tipo de Documento eliminado exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.document-types.index')
+            return redirect()->route(Auth::user()->role->name .'.document-types.index')
                 ->with('error', 'No se puede eliminar este Tipo de Documento porque está siendo utilizado en el sistema.');
         }
     }

@@ -5,16 +5,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitBtn = document.getElementById('submitBtn');
     const newMileageInput = document.getElementById('new_mileage');
     
-    // Deshabilitar el select de vehículos inicialmente
-    vehicleSelect.disabled = true;
+    // Deshabilitar el select de vehículos inicialmente si no está ya deshabilitado
+    if (!vehicleSelect.disabled) {
+        vehicleSelect.disabled = true;
+    }
     
     // Filtrar vehículos por tipo
     function filterVehiclesByType(typeId) {
-        // Habilitar el select de vehículos
-        vehicleSelect.disabled = false;
-        
-        // Resetear la selección
-        vehicleSelect.value = '';
+        // Habilitar el select de vehículos solo si no está deshabilitado por ser conductor
+        if (!vehicleSelect.hasAttribute('disabled')) {
+            vehicleSelect.disabled = false;
+            
+            // Resetear la selección solo si no es conductor
+            vehicleSelect.value = '';
+        }
         
         // Filtrar opciones
         Array.from(vehicleSelect.options).forEach(option => {
@@ -23,9 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
             option.hidden = !show;
         });
         
-        // Resetear el kilometraje
-        document.getElementById('last_mileage_display').textContent = 'Seleccione un vehículo';
-        document.getElementById('new_mileage').value = '';
+        // Resetear el kilometraje solo si no hay un vehículo seleccionado
+        if (!vehicleSelect.value) {
+            document.getElementById('last_mileage_display').textContent = 'Seleccione un vehículo';
+            document.getElementById('new_mileage').value = '';
+        }
     }
     
     // Función para manejar la visibilidad de las secciones y sus campos required
@@ -76,9 +82,11 @@ document.addEventListener('DOMContentLoaded', function () {
             
             document.getElementById('sections-info').style.display = 'none';
         } else {
-            // Deshabilitar el select de vehículos
-            vehicleSelect.disabled = true;
-            vehicleSelect.value = '';
+            // Deshabilitar el select de vehículos si no está ya deshabilitado por ser conductor
+            if (!vehicleSelect.hasAttribute('disabled')) {
+                vehicleSelect.disabled = true;
+                vehicleSelect.value = '';
+            }
             
             // Ocultar todas las secciones
             const sectionCards = document.querySelectorAll('.section-card');
@@ -233,39 +241,70 @@ document.addEventListener('DOMContentLoaded', function () {
         return true;
     });
     
-    // Inicializar si hay valores preseleccionados (por ejemplo, después de un error de validación)
-    if (vehicleTypeSelect.value) {
-        // Si hay un tipo de vehículo seleccionado, habilitar el select de vehículos
-        vehicleSelect.disabled = false;
-        
-        // Filtrar vehículos por tipo
-        filterVehiclesByType(vehicleTypeSelect.value);
-        
-        // Mostrar las secciones correspondientes
-        const sectionCards = document.querySelectorAll('.section-card');
-        sectionCards.forEach(card => {
-            const vehicleTypes = JSON.parse(card.dataset.vehicleTypes || '[]');
-            const shouldShow = vehicleTypes.includes(parseInt(vehicleTypeSelect.value));
-            toggleSectionVisibility(card, shouldShow);
-        });
-        
-        document.getElementById('sections-info').style.display = 'none';
-        
-        // Si también hay un vehículo seleccionado, mostrar su kilometraje
-        if (vehicleSelect.value) {
-            const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
-            const lastMileage = selectedOption.dataset.mileage;
-            document.getElementById('last_mileage_display').textContent = lastMileage + ' km';
-            submitBtn.disabled = false;
+    // Inicializar si hay valores preseleccionados
+    function initializeForm() {
+        // Si hay un vehículo preseleccionado y está deshabilitado (usuario conductor)
+        if (vehicleSelect.disabled && vehicleSelect.value === '') {
+            // Buscar la opción seleccionada por el hidden input
+            const hiddenVehicleInput = document.querySelector('input[type="hidden"][name="vehicle_id"]');
+            if (hiddenVehicleInput) {
+                const vehicleId = hiddenVehicleInput.value;
+                // Seleccionar la opción correspondiente
+                const option = Array.from(vehicleSelect.options).find(opt => opt.value === vehicleId);
+                if (option) {
+                    option.selected = true;
+                    
+                    // Mostrar el último kilometraje
+                    const lastMileage = option.dataset.mileage;
+                    document.getElementById('last_mileage_display').textContent = lastMileage + ' km';
+                }
+            }
         }
-    } else {
-        // Ocultar todas las secciones inicialmente
-        const sectionCards = document.querySelectorAll('.section-card');
-        sectionCards.forEach(card => {
-            toggleSectionVisibility(card, false);
-        });
         
-        document.getElementById('sections-info').style.display = 'block';
-        submitBtn.disabled = true;
+        // Si hay un tipo de vehículo seleccionado
+        if (vehicleTypeSelect.value) {
+            // Si el select de vehículos no está deshabilitado, habilitarlo
+            if (!vehicleSelect.disabled) {
+                vehicleSelect.disabled = false;
+            }
+            
+            // Filtrar vehículos por tipo (solo si no es conductor)
+            if (!vehicleSelect.disabled) {
+                filterVehiclesByType(vehicleTypeSelect.value);
+            }
+            
+            // Mostrar las secciones correspondientes
+            const sectionCards = document.querySelectorAll('.section-card');
+            sectionCards.forEach(card => {
+                const vehicleTypes = JSON.parse(card.dataset.vehicleTypes || '[]');
+                const shouldShow = vehicleTypes.includes(parseInt(vehicleTypeSelect.value));
+                toggleSectionVisibility(card, shouldShow);
+            });
+            
+            document.getElementById('sections-info').style.display = 'none';
+            
+            // Si también hay un vehículo seleccionado, mostrar su kilometraje
+            if (vehicleSelect.value) {
+                const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
+                if (selectedOption) {
+                    const lastMileage = selectedOption.dataset.mileage;
+                    document.getElementById('last_mileage_display').textContent = lastMileage + ' km';
+                }
+            }
+        } else {
+            // Ocultar todas las secciones inicialmente
+            const sectionCards = document.querySelectorAll('.section-card');
+            sectionCards.forEach(card => {
+                toggleSectionVisibility(card, false);
+            });
+            
+            document.getElementById('sections-info').style.display = 'block';
+        }
+        
+        // Verificar si todas las preguntas tienen respuesta para habilitar el botón
+        checkAllQuestionsAnswered();
     }
+    
+    // Inicializar el formulario
+    initializeForm();
 });

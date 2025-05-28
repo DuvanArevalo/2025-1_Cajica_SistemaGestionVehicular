@@ -54,6 +54,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('document-types', DocumentTypeController::class)->except(['destroy']);
     Route::resource('roles', RoleController::class)->except(['destroy']);
     Route::resource('vehicles', VehicleController::class)->except(['destroy']);
+    Route::patch('vehicles/{vehicle}/toggle-status', [VehicleController::class, 'toggleStatus'])->name('vehicles.toggle-status');
     Route::resource('vehicle-brands', VehicleBrandController::class)->except(['destroy']);
     Route::resource('vehicle-models', VehicleModelController::class)->except(['destroy']);
     Route::resource('vehicle-types', VehicleTypeController::class)->except(['destroy']);
@@ -76,6 +77,7 @@ Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(func
     Route::resource('document-types', DocumentTypeController::class)->except(['destroy']);
     Route::resource('roles', RoleController::class)->except(['destroy'])->middleware('restrictAdminSSTRoles');
     Route::resource('vehicles', VehicleController::class)->except(['destroy']);
+    Route::patch('vehicles/{vehicle}/toggle-status', [VehicleController::class, 'toggleStatus'])->name('vehicles.toggle-status');
     Route::resource('vehicle-brands', VehicleBrandController::class)->except(['destroy']);
     Route::resource('vehicle-models', VehicleModelController::class)->except(['destroy']);
     Route::resource('vehicle-types', VehicleTypeController::class)->except(['destroy']);

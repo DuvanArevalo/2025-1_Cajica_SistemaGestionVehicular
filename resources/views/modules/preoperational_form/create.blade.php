@@ -33,14 +33,17 @@
                         <!-- Selección de Conductor -->
                         <div class="mb-3">
                             <label for="user_id" class="form-label">Conductor</label>
-                            <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
+                            <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required {{ $userIsDriver ?? false ? 'disabled' : '' }}>
                                 <option value="">Seleccione un conductor</option>
                                 @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                    <option value="{{ $user->id }}" {{ (old('user_id') == $user->id || ($preselectedUser ?? null) == $user->id) ? 'selected' : '' }}>
                                         {{ $user->fullName }}
                                     </option>
                                 @endforeach
                             </select>
+                            @if($userIsDriver ?? false)
+                                <input type="hidden" name="user_id" value="{{ $preselectedUser }}">
+                            @endif
                             @error('user_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -51,14 +54,17 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="vehicle_type_id" class="form-label">Tipo de Vehículo</label>
-                                    <select class="form-select @error('vehicle_type_id') is-invalid @enderror" id="vehicle_type_id" name="vehicle_type_id">
+                                    <select class="form-select @error('vehicle_type_id') is-invalid @enderror" id="vehicle_type_id" name="vehicle_type_id" {{ ($userIsDriver ?? false) && ($preselectedVehicleType ?? null) ? 'disabled' : '' }}>
                                         <option value="">Seleccione un tipo de vehículo</option>
                                         @foreach($vehicleTypes as $type)
-                                            <option value="{{ $type->id }}" {{ old('vehicle_type_id') == $type->id ? 'selected' : '' }}>
+                                            <option value="{{ $type->id }}" {{ (old('vehicle_type_id') == $type->id || ($preselectedVehicleType ?? null) == $type->id) ? 'selected' : '' }}>
                                                 {{ $type->name }}
                                             </option>
                                         @endforeach
                                     </select>
+                                    @if(($userIsDriver ?? false) && ($preselectedVehicleType ?? null))
+                                        <input type="hidden" name="vehicle_type_id" value="{{ $preselectedVehicleType }}">
+                                    @endif
                                     @error('vehicle_type_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -67,17 +73,20 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="vehicle_id" class="form-label">Vehículo</label>
-                                    <select class="form-select @error('vehicle_id') is-invalid @enderror" id="vehicle_id" name="vehicle_id" required>
+                                    <select class="form-select @error('vehicle_id') is-invalid @enderror" id="vehicle_id" name="vehicle_id" required {{ ($userIsDriver ?? false) && ($preselectedVehicle ?? null) ? 'disabled' : '' }}>
                                         <option value="">Seleccione un vehículo</option>
                                         @foreach($vehicles as $vehicle)
                                             <option value="{{ $vehicle->id }}" 
                                                     data-type="{{ $vehicle->vehicle_type_id }}"
                                                     data-mileage="{{ $vehicle->mileage }}"
-                                                    {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }}>
+                                                    {{ (old('vehicle_id') == $vehicle->id || ($preselectedVehicle->id ?? null) == $vehicle->id) ? 'selected' : '' }}>
                                                 {{ $vehicle->plate }} - {{ $vehicle->brand->name }} {{ $vehicle->model->name }}
                                             </option>
                                         @endforeach
                                     </select>
+                                    @if(($userIsDriver ?? false) && ($preselectedVehicle ?? null))
+                                        <input type="hidden" name="vehicle_id" value="{{ $preselectedVehicle->id }}">
+                                    @endif
                                     @error('vehicle_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

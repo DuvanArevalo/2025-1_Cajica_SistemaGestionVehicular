@@ -16,7 +16,7 @@
                     text="Volver al dashboard" 
                 />
 
-                <a href="{{ route('admin.roles.create') }}" class="btn btn-primary">
+                <a href="{{ route(Auth::user()->role->name .'.roles.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nuevo Rol
                 </a>
             </div>
@@ -28,7 +28,7 @@
                     <h5 class="mb-0">Filtrar Roles</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.roles.index') }}" method="GET" class="row g-3">
+                    <form action="{{ route(Auth::user()->role->name .'.roles.index') }}" method="GET" class="row g-3">
                         <div class="col-md-3">
                             <label for="filter_type" class="form-label">Filtrar por:</label>
                             <select id="filter_type" name="filter_type" class="form-select" onchange="toggleFilterFields()">
@@ -65,7 +65,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-search me-1"></i> Buscar
                             </button>
-                            <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary ms-2">
+                            <a href="{{ route(Auth::user()->role->name .'.roles.index') }}" class="btn btn-secondary ms-2">
                                 <i class="bi bi-x-circle me-1"></i> Limpiar
                             </a>
                         </div>
@@ -117,11 +117,11 @@
                                         <td>{{ $role->created_at->format('d/m/Y') }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.roles.show', $role->id) }}" class="btn btn-sm btn-info">
+                                                <a href="{{ route(Auth::user()->role->name .'.roles.show', $role->id) }}" class="btn btn-sm btn-info">
                                                     <i class="bi bi-eye"></i>
                                                     Ver
                                                 </a>
-                                                <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-sm btn-warning">
+                                                <a href="{{ route(Auth::user()->role->name .'.roles.edit', $role->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i>
                                                     Editar
                                                 </a>

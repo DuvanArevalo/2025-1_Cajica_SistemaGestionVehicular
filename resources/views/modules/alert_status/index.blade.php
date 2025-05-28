@@ -16,7 +16,7 @@
                     text="Volver al dashboard" 
                 />
 
-                <a href="{{ route('admin.alert-statuses.create') }}" class="btn btn-primary">
+                <a href="{{ route(Auth::user()->role->name .'.alert-statuses.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nuevo Estado de Alerta
                 </a>
             </div>
@@ -28,7 +28,7 @@
                     <h5 class="mb-0">Filtrar Estados de Alerta</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.alert-statuses.index') }}" method="GET" class="row g-3">
+                    <form action="{{ route(Auth::user()->role->name .'.alert-statuses.index') }}" method="GET" class="row g-3">
                         <div class="col-md-3">
                             <label for="filter_type" class="form-label">Filtrar por:</label>
                             <select id="filter_type" name="filter_type" class="form-select" onchange="toggleFilterFields()">
@@ -65,7 +65,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-search me-1"></i> Buscar
                             </button>
-                            <a href="{{ route('admin.alert-statuses.index') }}" class="btn btn-secondary ms-2">
+                            <a href="{{ route(Auth::user()->role->name .'.alert-statuses.index') }}" class="btn btn-secondary ms-2">
                                 <i class="bi bi-x-circle me-1"></i> Limpiar
                             </a>
                         </div>
@@ -115,11 +115,11 @@
                                         </td>
                                         <td class="ps-4">
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.alert-statuses.show', $status->id) }}" class="btn btn-sm btn-info">
+                                                <a href="{{ route(Auth::user()->role->name .'.alert-statuses.show', $status->id) }}" class="btn btn-sm btn-info">
                                                     <i class="bi bi-eye"></i>
                                                     Ver
                                                 </a>
-                                                <a href="{{ route('admin.alert-statuses.edit', $status->id) }}" class="btn btn-sm btn-warning">
+                                                <a href="{{ route(Auth::user()->role->name .'.alert-statuses.edit', $status->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i>
                                                     Editar
                                                 </a>
