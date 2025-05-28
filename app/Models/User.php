@@ -87,8 +87,20 @@ class User extends Authenticatable // implements MustVerifyEmail (si necesitas v
     }
 
     // Obtener nombre completo del usuario
+
+    public function getNameAttribute(): string
+    {
+        return "{$this->name1} {$this->lastname1}";
+    }
+
     public function getFullNameAttribute(): string
     {
         return "{$this->name1} {$this->lastname1}";
     }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
+
 }
