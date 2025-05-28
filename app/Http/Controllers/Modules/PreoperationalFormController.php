@@ -92,16 +92,48 @@ class PreoperationalFormController extends Controller
     /**
      * Mostrar formulario de creación.
      */
-    public function create()
+    public function create(Request $request)
     {
+        // Obtener usuarios conductores activos
         $users = User::whereHas('role', fn ($q) => $q->where('name', 'conductor'))
                      ->where('is_active', true)
                      ->get();
+        
         $vehicleTypes = VehicleType::all();
         $vehicles = Vehicle::where('is_active', true)->get();
         $sections = Section::with('questions')->get();
-
-        return view('modules.preoperational_form.create', compact('users', 'vehicleTypes', 'vehicles', 'sections'));
+        
+        // Precargar información si se proporciona un vehicle_id
+        $preselectedVehicle = null;
+        $preselectedVehicleType = null;
+        
+        if ($request->has('vehicle_id')) {
+            $preselectedVehicle = Vehicle::find($request->vehicle_id);
+            
+            if ($preselectedVehicle) {
+                $preselectedVehicleType = $preselectedVehicle->vehicle_type_id;
+            }
+        }
+        
+        // Si el usuario es conductor, preseleccionar su ID
+        $preselectedUser = null;
+        $userIsDriver = false;
+        
+        if (Auth::user()->role->name === 'conductor') {
+            $preselectedUser = Auth::user()->id;
+            $userIsDriver = true;
+        }
+        
+        return view('modules.preoperational_form.create', compact(
+            'users', 
+            'vehicleTypes', 
+            'vehicles', 
+            'sections', 
+            'preselectedVehicle', 
+            'preselectedVehicleType', 
+            'preselectedUser',
+            'userIsDriver'
+        ));
     }
 
     /**

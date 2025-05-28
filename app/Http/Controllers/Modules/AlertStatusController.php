@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Controllers\Controller;
 use App\Models\AlertStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AlertStatusController extends Controller
@@ -68,14 +69,14 @@ class AlertStatusController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.alert-statuses.create')
+            return redirect()->route(Auth::user()->role->name .'.alert-statuses.create')
                 ->withErrors($validator)
                 ->withInput();
         }
 
         AlertStatus::create($request->all());
 
-        return redirect()->route('admin.alert-statuses.index')
+        return redirect()->route(Auth::user()->role->name .'.alert-statuses.index')
             ->with('success', 'Estado de alerta creado exitosamente.');
     }
 
@@ -106,14 +107,14 @@ class AlertStatusController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.alert-statuses.edit', $alertStatus->id)
+            return redirect()->route(Auth::user()->role->name .'.alert-statuses.edit', $alertStatus->id)
                 ->withErrors($validator)
                 ->withInput();
         }
 
         $alertStatus->update($request->all());
 
-        return redirect()->route('admin.alert-statuses.index')
+        return redirect()->route(Auth::user()->role->name .'.alert-statuses.index')
             ->with('success', 'Estado de alerta: '.$alertStatus->type.' actualizado exitosamente.');
     }
 
@@ -124,12 +125,12 @@ class AlertStatusController extends Controller
     {
         // Verificar si hay alertas asociadas a este estado
         if ($alertStatus->alerts()->count() > 0) {
-            return redirect()->route('admin.alert-statuses.index')
+            return redirect()->route(Auth::user()->role->name .'.alert-statuses.index')
                 ->with('error', 'No se puede eliminar este Estado porque hay alertas asociadas.');
         }
 
         $alertStatus->delete();
-        return redirect()->route('admin.alert-statuses.index')
+        return redirect()->route(Auth::user()->role->name .'.alert-statuses.index')
             ->with('success', 'Estado de alerta eliminado exitosamente.');
     }
 }

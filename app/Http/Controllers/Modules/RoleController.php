@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
@@ -70,7 +71,7 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.roles.create')
+            return redirect()->route(Auth::user()->role->name .'.roles.create')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -81,7 +82,7 @@ class RoleController extends Controller
 
         Role::create($data);
 
-        return redirect()->route('admin.roles.index')
+        return redirect()->route(Auth::user()->role->name .'.roles.index')
             ->with('success', 'Rol creado exitosamente.');
     }
 
@@ -113,7 +114,7 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.roles.edit', $role->id)
+            return redirect()->route(Auth::user()->role->name .'.roles.edit', $role->id)
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -124,7 +125,7 @@ class RoleController extends Controller
 
         $role->update($data);
 
-        return redirect()->route('admin.roles.index')
+        return redirect()->route(Auth::user()->role->name .'.roles.index')
             ->with('success', 'Rol: '.$role->name.' actualizado exitosamente.');
     }
 
@@ -135,16 +136,16 @@ class RoleController extends Controller
     {
         // Verificar si hay usuarios asociados a este rol
         if ($role->users()->count() > 0) {
-            return redirect()->route('admin.roles.index')
+            return redirect()->route(Auth::user()->role->name .'.roles.index')
                 ->with('error', 'No se puede eliminar este Rol porque hay usuarios asociados.');
         }
 
         try {
             $role->delete();
-            return redirect()->route('admin.roles.index')
+            return redirect()->route(Auth::user()->role->name .'.roles.index')
                 ->with('success', 'Rol eliminado exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.roles.index')
+            return redirect()->route(Auth::user()->role->name .'.roles.index')
                 ->with('error', 'No se puede eliminar este Rol porque está siendo utilizado en el sistema.');
         }
     }
