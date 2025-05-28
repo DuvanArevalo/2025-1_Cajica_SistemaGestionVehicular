@@ -69,6 +69,11 @@
                             <a href="{{ route(Auth::user()->role->name . '.preoperational-forms.index') }}" class="btn btn-secondary ms-2">
                                 <i class="bi bi-x-circle me-1"></i> Limpiar
                             </a>
+                            @if(in_array(strtolower(Auth::user()->role->name), ['admin','sst']))
+                            <a href="{{ route(Auth::user()->role->name.'.preoperational-forms.export', request()->all()) }}" class="btn btn-danger ms-2">
+                                <i class="bi bi-file-earmark-pdf-fill"></i> Exportar PDF
+                            </a>
+                            @endif
                         </div>
                     </form>
                 </div>
