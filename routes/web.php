@@ -24,6 +24,9 @@ use App\Http\Controllers\Modules\VehicleController as VehicleController;
 use App\Http\Controllers\Modules\VehicleModelController as VehicleModelController;
 use App\Http\Controllers\Modules\VehicleTypeController as VehicleTypeController;
 
+// Funcionalidades extra
+use App\Http\Controllers\Modules\PreoperationalExportController as PreoperationalExportController;
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -47,6 +50,7 @@ Auth::routes();
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('preoperational-forms/export', [PreoperationalFormController::class, 'exportPdf'])->name('preoperational-forms.export');
     
     // Modulos
     Route::resource('users', UserController::class)->except(['destroy']);
@@ -70,6 +74,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // Grupo para rutas de SST
 Route::middleware(['auth', 'role:sst'])->prefix('sst')->name('sst.')->group(function () {
     Route::get('/dashboard', [SSTController::class, 'index'])->name('dashboard');
+    Route::get('preoperational-forms/export', [PreoperationalFormController::class, 'exportPdf'])->name('preoperational-forms.export');
     
     // Modulos específicos para SST
     Route::resource('users', UserController::class)->except(['destroy'])->middleware('restrictAdminSSTRoles');

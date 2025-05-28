@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use \Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class PreoperationalFormController extends Controller
 {
@@ -60,6 +62,32 @@ class PreoperationalFormController extends Controller
 
         $preoperationalForms = $query->orderByDesc('created_at')->paginate(20);
         return view('modules.preoperational_form.index', compact('preoperationalForms'));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        // Clonamos la lógica de filtros de index
+        $query = PreoperationalForm::query();
+
+        if ($driver = $request->get('user_search')) {
+            $query->whereHas('driver', fn($q) => $q->where('name','like', "%{$driver}%"));
+        }
+        if ($plate = $request->get('vehicle_search')) {
+            $query->whereHas('vehicle', fn($q) => $q->where('plate','like', "%{$plate}%"));
+        }
+        if ($from = $request->get('date_from')) {
+            $to = $request->get('date_to') ?: now()->toDateString();
+            $query->whereBetween('created_at', [$from, $to]);
+        }
+
+        $records = $query->orderBy('created_at','desc')->get();
+        $now = Carbon::now('America/Bogota');
+        $user = Auth::user();
+
+        $pdf = PDF::loadView('modules.preoperational_form.pdf', compact('records','now', 'user'))
+                    ->setPaper('a4','portrait');
+
+        return $pdf->download("preoperational_{$now->format('Ymd_His')}.pdf");
     }
 
     /**
