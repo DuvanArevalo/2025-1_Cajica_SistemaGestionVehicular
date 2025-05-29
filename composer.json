@@ -80,6 +80,21 @@
             "npm install",
             "composer run dev"
         ],
+	"prod": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve --host=0.0.0.0 --port=8000\" \"php artisan queue:listen --tries=1\" \"npm run build\" --names='server,queue,vite'"
+        ],
+	"prod-cmd": [
+            "Composer\\Config::disableProcessTimeout",
+            "cls",
+            "@php artisan view:clear",
+            "@php artisan cache:clear",
+            "@php artisan config:clear",
+            "@php artisan route:clear",
+            "@php artisan optimize:clear",
+            "npm install",
+            "composer run prod"
+        ],
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
